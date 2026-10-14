@@ -1,0 +1,77 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "RIIM",
+  "position": "Lead Data Engineer - Healthcare",
+  "location": "Houston, TX",
+  "comp_mentions": [],
+  "urls": [
+   "https://www.linkedin.com/jobs/view/lead-data-engineer-healthcare-at-riim-4479539427"
+  ],
+  "highlight": "LinkedIn listing 2026-10-14; Mid-Senior level",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "linkedin"
+  },
+  "jd_excerpt": "Strong hands-on experience as a Data Engineer, preferably in the healthcare domain. Expertise in designing and implementing ETL/ELT pipelines and complex data integration workflows. Strong experience with Microsoft Azure data engineering services. Experience with one or more of the following: Azure Data Factory, Azure Databricks, Azure Data Lake Storage, Azure Synapse Analytics, or Microsoft Fabric. Proficiency in SQL and Python for data transformation, automation, and pipeline development. Experience with Apache Spark, PySpark, or other distributed data processing technologies. Understanding of data modeling, data warehousing, lakehouse architecture, and scalable data platforms. Experience preparing and processing data for AI/ML use cases, including feature engineering and ML data pipelines."
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "linkedin",
+ "fit": {
+  "fit": 2,
+  "why": "Houston and the data automation, SQL, Python, Tableau, and AWS pipeline work are relevant, but the resume does not demonstrate the Azure stack, distributed processing, lakehouse architecture, AI/ML data pipelines, or Lead-level depth required for this role.",
+  "flags": [
+   "Lead-level seniority is not established",
+   "Azure ecosystem experience is not demonstrated; the documented cloud experience is AWS",
+   "Healthcare-domain experience is not demonstrated",
+   "Role is substantially more senior and platform-specific than the candidate's documented Associate Data Engineer experience"
+  ],
+  "req_gaps": [
+   {
+    "req": "Strong hands-on experience as a Data Engineer",
+    "verdict": "存疑",
+    "note": "The resume documents Associate Data Engineer / Analyst experience from Mar 2025 to Jul 2026, but does not establish the depth expected for a Lead Data Engineer."
+   },
+   {
+    "req": "Expertise in designing and implementing ETL/ELT pipelines and complex data integration workflows",
+    "verdict": "存疑",
+    "note": "The candidate built an automated Python/AWS ingestion pipeline and a Salesforce-integrated platform, but the resume does not explicitly establish complex ETL/ELT expertise."
+   },
+   {
+    "req": "Strong experience with Microsoft Azure data engineering services",
+    "verdict": "存疑",
+    "note": "Cloud pipeline experience is documented on AWS, but Microsoft Azure experience is not shown."
+   },
+   {
+    "req": "Experience with one or more of the following: Azure Data Factory, Azure Databricks, Azure Data Lake Storage, Azure Synapse Analytics, or Microsoft Fabric",
+    "verdict": "存疑",
+    "note": "The resume lists AWS, Tableau, Power BI, and Salesforce but does not document any of the specified Azure services."
+   },
+   {
+    "req": "Proficiency in SQL and Python for data transformation, automation, and pipeline development",
+    "verdict": "存疑",
+    "note": "SQL and Python automation, reporting, APIs, and an AWS ingestion pipeline are documented, but the required proficiency level is not explicitly established."
+   },
+   {
+    "req": "Experience with Apache Spark, PySpark, or other distributed data processing technologies",
+    "verdict": "存疑",
+    "note": "The resume documents Python, C++, SQL, and AWS work but does not mention Spark, PySpark, or distributed data processing."
+   },
+   {
+    "req": "Understanding of data modeling, data warehousing, lakehouse architecture, and scalable data platforms",
+    "verdict": "存疑",
+    "note": "The candidate designed SQL reporting tables and worked with cloud-hosted data, but data modeling, warehousing, and lakehouse architecture are not explicitly documented."
+   },
+   {
+    "req": "Experience preparing and processing data for AI/ML use cases, including feature engineering and ML data pipelines",
+    "verdict": "存疑",
+    "note": "No AI/ML data preparation, feature engineering, or ML pipeline experience is stated in the resume."
+   }
+  ]
+ },
+ "raw_excerpt": "LINKEDIN Data Engineer · Lead Data Engineer - Healthcare @ RIIM",
+ "approved": null
+}

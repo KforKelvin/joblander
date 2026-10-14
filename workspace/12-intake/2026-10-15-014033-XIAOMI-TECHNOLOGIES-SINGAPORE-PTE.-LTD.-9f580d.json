@@ -1,0 +1,102 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "XIAOMI TECHNOLOGIES SINGAPORE PTE. LTD.",
+  "position": "Data Engineer (Senior)",
+  "location": "Singapore",
+  "comp_mentions": [
+   "8000–15000 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/engineering/data-engineer-xiaomi-technologies-singapore-dce3e3148f95a89b0162f80b029f580d"
+  ],
+  "highlight": "MCF listing 2026-10-14; 8000–15000 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Job Summary Lead the research and development of Xiaomi’s data platform, designing and delivering scalable, high-performance data systems that empower analytics and data science teams to drive intelligent operations. Responsibilities Design and deliver large-scale data platforms for Xiaomi Internet businesses, ensuring end-to-end system functionality and scalability Build infrastructure and tools to optimize extraction, transformation, and loading of data from diverse sources with high throughput and fault tolerance Develop and implement Data as a Service (DaaS) solutions to support analytics and data science teams in agile decision-making Identify and implement process improvements by automating manual tasks, optimizing data delivery, and redesigning infrastructure for scalability Lead the design and evolution of data warehouse layering strategies (ODS/DWD/DWS/ADS) and establish modeling standards and best practices Evaluate and integrate emerging big data technologies (e.g., Iceberg, Flink, Doris) to enhance pipeline performance, reduce costs, and improve data freshness Define and enforce data governance policies, including data quality standards, lineage tracking, access control, and metadata management Collaborate with product, engineering, and business intelligence teams to translate complex business requirements into scalable data architectures Mentor junior engineers through code reviews, technical guidance, and knowledge sharing to strengthen team capabilities Drive cross-team technical alignment on the data platform roadmap, participate in architecture reviews, and contribute to long-term infrastructure planning Required competencies and certifications Strong fundamentals in computer science, including algorithms and data structures, supported by a degree in Computer Science, Software Engineering, Information Technology, or related fields Proficient in at least one programming language such as C++, Go, Java, or Python, with experience in Linux shell development Solid understanding of system performance and scaling principles Effective communication and collaboration skills within a team environment",
+  "skills": [
+   "Complex Data Sources",
+   "Collaboration",
+   "Big Data Framework",
+   "Process Improvement",
+   "Data Quality Standards",
+   "Pipelines",
+   "Data Services Business",
+   "Transformation",
+   "Data Governance",
+   "Cost Reduction",
+   "Data Engineering",
+   "Access Control Management",
+   "Standards Development",
+   "Data Infrastructure",
+   "Apache Flink"
+  ],
+  "min_yoe": 5
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "The role is directionally relevant, but the Singapore location and senior-level experience bar create a significant mismatch despite strong Python, SQL, AWS, Tableau, and pipeline automation experience.",
+  "flags": [
+   "Location mismatch: Singapore rather than preferred Houston",
+   "Senior role with a 5-year minimum experience requirement",
+   "Potential depth gap in large-scale data platforms, big data frameworks, and data governance",
+   "No evidence of Apache Flink, Iceberg, Doris, or ODS/DWD/DWS/ADS warehouse layering"
+  ],
+  "req_gaps": [
+   {
+    "req": "5 years of experience",
+    "verdict": "不符",
+    "note": "The listing requires 5 years, while the documented professional experience is approximately 4 years and includes student and internship roles."
+   },
+   {
+    "req": "Build infrastructure and tools to optimize extraction, transformation, and loading of data from diverse sources with high throughput and fault tolerance",
+    "verdict": "存疑",
+    "note": "The resume shows AWS-based ingestion and reporting automation, but does not establish high-throughput or fault-tolerant infrastructure experience."
+   },
+   {
+    "req": "Develop and implement Data as a Service (DaaS) solutions to support analytics and data science teams in agile decision-making",
+    "verdict": "存疑",
+    "note": "The resume shows data pipelines, dashboards, and APIs, but does not explicitly document DaaS solutions."
+   },
+   {
+    "req": "Lead the design and evolution of data warehouse layering strategies (ODS/DWD/DWS/ADS) and establish modeling standards and best practices",
+    "verdict": "存疑",
+    "note": "The resume documents SQL table design and reporting data sources, but not warehouse layering strategies or modeling standards."
+   },
+   {
+    "req": "Evaluate and integrate emerging big data technologies (e.g., Iceberg, Flink, Doris) to enhance pipeline performance, reduce costs, and improve data freshness",
+    "verdict": "不符",
+    "note": "No experience with Iceberg, Flink, Doris, or comparable big data frameworks is documented."
+   },
+   {
+    "req": "Define and enforce data governance policies, including data quality standards, lineage tracking, access control, and metadata management",
+    "verdict": "存疑",
+    "note": "The resume shows Salesforce-integrated QA and compliance platform work, but does not explicitly establish ownership of data governance policies across these areas."
+   },
+   {
+    "req": "Mentor junior engineers through code reviews, technical guidance, and knowledge sharing to strengthen team capabilities",
+    "verdict": "存疑",
+    "note": "The resume documents developer-facing libraries and documentation, but not mentoring or code-review responsibilities."
+   },
+   {
+    "req": "Strong understanding of system performance and scaling principles",
+    "verdict": "存疑",
+    "note": "The resume shows performance-oriented SQL optimization and a platform supporting 60+ users, but does not explicitly demonstrate system scaling principles."
+   },
+   {
+    "req": "with experience in Linux shell development",
+    "verdict": "存疑",
+    "note": "Linux is listed as a tool, but Linux shell development is not explicitly documented."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer (Senior) @ XIAOMI TECHNOLOGIES SINGAPORE PTE. LTD.",
+ "approved": null
+}

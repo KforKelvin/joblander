@@ -1,0 +1,58 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "RECRUIT EXPRESS PTE LTD",
+  "position": "Application Engineer (Process Analytics) - $3.5K to $4.5K (Chemical / Environmental Enigneering) #HKH",
+  "location": "Singapore",
+  "comp_mentions": [
+   "3500–4500 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/engineering/application-engineer-35k-45k-hkh-recruit-express-3be5024605057a55953c27a7cc2f01a5"
+  ],
+  "highlight": "MCF listing 2026-10-14; 3500–4500 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Manage and provide direct technical and application support for process analytics business in Singapore. Coordinate with sales team, sub vendors for the integration of process analyzer. Perform troubleshooting and conduct site visit for process analyzer. Setup onsite trial and conduct review with customer. Prepare and deliver in-house and onsite technical/product training to customers. Create technical materials to support the sales team. JOB REQUIREMENTS: Min Bachelor's Degree/Post Graduate Diploma/Professional Degree in Engineering (Chemical), Engineering (Environmental), Engineering (Environmental, Water Treatment) or equivalent. No experience needed, training provided Those with relevant experience will be an advantage $3700 to $3800 (For candidates with no experience) Up to $4.5K (For candidates with experience) Scientific Analytical MNC Interested candidates, please forward your resume to kevynhuang@recruitexpress.com.sg Consultant: Huang Jingsheng Kevyn (R1333338) Recruit Express Pte Ltd (99C4599)",
+  "skills": [
+   "Work Process Development",
+   "Safety Compliance",
+   "Task Assignment",
+   "scientific discipline",
+   "Mechanical",
+   "Equipment Maintenance",
+   "Medical Device Manufacturing",
+   "Efficiency Improvement",
+   "Manufacturing",
+   "Electrical Engineering",
+   "Calibration"
+  ],
+  "min_yoe": 1
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 1,
+  "why": "Not worth prioritizing because the role is in Singapore, centers on chemical/environmental process analytics rather than the candidate’s target data roles, and requires a degree alignment the resume does not demonstrate.",
+  "flags": [
+   "Recruitment agency posting: Recruit Express Pte Ltd",
+   "Location mismatch: Singapore rather than Houston",
+   "Direction mismatch: application/process analytics support rather than data engineering, analytics engineering, BI, or data analysis",
+   "Potential compensation mismatch: SGD 3,500–4,500 monthly; no salary preference was provided"
+  ],
+  "req_gaps": [
+   {
+    "req": "Min Bachelor's Degree/Post Graduate Diploma/Professional Degree in Engineering (Chemical), Engineering (Environmental), Engineering (Environmental, Water Treatment) or equivalent.",
+    "verdict": "不符",
+    "note": "The candidate holds a Master of Computer Science and a Bachelor of Science in Computer Engineering; the resume does not show a Chemical, Environmental, or Water Treatment Engineering degree or equivalent background."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Analytics Engineer · Application Engineer (Process Analytics) - $3.5K to $4.5K (Chemical / Environmental Enigneering) #HKH @ RECRUIT EXPRESS PTE LTD",
+ "approved": null
+}

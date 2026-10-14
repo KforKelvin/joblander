@@ -1,0 +1,45 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "Guidehouse",
+  "position": "Public Health Data Engineer",
+  "location": "Greater Houston",
+  "comp_mentions": [],
+  "urls": [
+   "https://www.linkedin.com/jobs/view/public-health-data-engineer-at-guidehouse-4469979652"
+  ],
+  "highlight": "LinkedIn listing 2026-10-13; Not Applicable",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "linkedin"
+  },
+  "jd_excerpt": "Job Family Data Science & Analysis Travel Required Up to 10% Clearance Required Ability to Obtain Public Trust What You Will Do Guidehouse seeks a Data Engineer to support the development, maintenance, and enhancement of data pipelines, cloud-based data platforms, and analytics solutions. The ideal candidate is an early-career professional with foundational experience in data engineering, software development, or cloud technologies who is eager to learn and grow in a collaborative environment. Assist in developing, testing, and maintaining data pipelines and ETL/ELT processes that ingest, transform, and load data from various sources. Support the implementation and enhancement of data models, databases, and cloud-based data solutions. Participate in data integration, migration, and modernization initiatives under the guidance of senior engineers. Develop and maintain scripts, queries, and applications using technologies such as Python, SQL, and PySpark. Support cloud-based data environments and services in AWS and Azure. Assist with the implementation of CI/CD processes and software development best practices using Git and related tools. Monitor data pipelines and systems, identify issues, and support troubleshooting and resolution activities. Perform data validation and quality assurance activities to help ensure data accuracy, completeness, and reliability. Collaborate with data engineers, developers, analysts, and other stakeholders to deliver high-quality solutions. Document technical processes, data flows, and system configurations. Continuously develop technical skills and stay current with emerging data engineering technologies and best practices. What You Will Need U.S. Citizenship or permanent residency is required and Must be able to OBTAIN and MAINTAIN a Federal or DHS \"PUBLIC TRUST. Bachelor's degree in Computer Science, Data Science, Information Systems, Engineering, Mathematics, or a related technical field. TWO (2) or more years of experience in data engineering, software engineering, data analytics, computer science, or a related technical discipline. Experience with a programming language such as Python, Java, or SQL. Experience with cloud platforms such as AWS or Azure through coursework, certifications, internships, or professional experience. Experience with data integration, ETL, data warehousing, or analytics concepts. What Would Be Nice To Have Internship, academic, research, or project experience involving data engineering, cloud co"
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "linkedin",
+ "fit": {
+  "fit": 4,
+  "why": "Strong Houston-aligned early-career data engineering match with direct AWS, Python, SQL, ETL, Tableau, data quality, and cloud pipeline experience; clearance eligibility remains unverified.",
+  "flags": [
+   "U.S. citizenship or permanent residency is not stated",
+   "Federal or DHS Public Trust eligibility is not stated"
+  ],
+  "req_gaps": [
+   {
+    "req": "U.S. Citizenship or permanent residency is required",
+    "verdict": "存疑",
+    "note": "The履历摘要 does not state U.S. citizenship or permanent residency."
+   },
+   {
+    "req": "Must be able to OBTAIN and MAINTAIN a Federal or DHS \"PUBLIC TRUST",
+    "verdict": "存疑",
+    "note": "The履历摘要 does not provide information about Public Trust eligibility or ability to obtain and maintain it."
+   }
+  ]
+ },
+ "raw_excerpt": "LINKEDIN Data Engineer · Public Health Data Engineer @ Guidehouse",
+ "approved": null
+}

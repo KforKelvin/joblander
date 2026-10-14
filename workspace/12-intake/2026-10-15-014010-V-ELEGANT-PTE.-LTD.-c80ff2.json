@@ -1,0 +1,126 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "V-ELEGANT PTE. LTD.",
+  "position": "Data Engineer",
+  "location": "Singapore",
+  "comp_mentions": [
+   "8000–10000 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/information-technology/data-engineer-v-elegant-d707cfff5e4117e8775fdfabe0c80ff2"
+  ],
+  "highlight": "MCF listing 2026-10-13; 8000–10000 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Responsibilities Create and manage a single master record for each business entity,ensuring data consistency, accuracy, and reliability. Implement data governance processes, including data quality management,data profiling, data remediation, and automated data lineage. Create and maintain multiple robust and high-performance data processingpipelines within Cloud, Private Data Centre, and Hybrid data ecosystems. Assemble large, complex data sets from a wide variety of data sources. Collaborate with Data Scientists, Machine Learning Engineers, Business Analysts, and Business users to derive actionable insights on data quality. Design and implement internal processes to automate manual workflows,optimize data delivery, and re-design infrastructure for greater scalability. Support and work with cross-functional teams in a dynamic environment. Requirements At least 5 years of experience ina data engineer role. Be familiar with data lake, data warehouse and data lake house architectures. Be familiar with MDM processes such as golden record creation, survivorship, reconciliation, enrichment, and quality. Experience building and operating large-scale data lakes and data ware houses. Experience with Hadoop ecosystem and big data tools, including Spark and Kafka. Experience with Master Data Management (MDM) tools and platforms such as Informatica MDM, Talend Data Catalog, Semarchy xDM, IBM PIM & IKC, or Profisee. Experience in data governance, including data quality management, data profiling, data remediation, and automated data lineage. Experience with stream-processing systems including Spark-Streaming. Experience working with Cloud services using one or more Cloud providerssuch as Azure, GCP, or AWS. Experience with Delta Lake and Databricks. Advanced working experience with relational SQL and NoSQL databases, including Hive, HBase, and Postgres. Deep understanding of SQL and the ability to optimize data queries. Experience with object-oriented/object function scripting languages:Python, Java, Scala, etc. A successful history of manipulating, processing, and extracting value from large, disconnected datasets. Experience applying modern development principles (Scrum, TDD,continuous integration, and code reviews). Proven ability to support and work with cross-functional teams in adynamic environment. Experience with ETL tools such as Talend Big Data, Azure Data Factory,etc. Experience working with Hortonworks Data Platform or Cloudera Data Platform. Experience wit",
+  "skills": [
+   "Complex Data Sources",
+   "Workflow Automation",
+   "Stream Processing",
+   "Data Pipeline",
+   "AWS",
+   "Data Warehouse Architectures",
+   "Azure Cloud Services",
+   "Data Profiling",
+   "Cross Functional Team Building",
+   "Apache Hadoop",
+   "Data Management Services",
+   "Data Lake",
+   "Process Management",
+   "Data Quality Management",
+   "Data Science"
+  ],
+  "min_yoe": 5
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 1,
+  "why": "The role is in Singapore rather than the preferred Houston market, and the candidate falls materially short of the required five years of data-engineering experience and enterprise big-data stack.",
+  "flags": [
+   "Location mismatch: Singapore versus Houston preference",
+   "Hard experience gap: JD requires at least 5 years in a data engineer role; the resume shows approximately 1 year and 4 months as an Associate Data Engineer / Analyst",
+   "Significant stack mismatch or unverified experience across Hadoop, Spark, Kafka, MDM, data lakes, Databricks, and enterprise ETL platforms"
+  ],
+  "req_gaps": [
+   {
+    "req": "At least 5 years of experience ina data engineer role.",
+    "verdict": "不符",
+    "note": "The resume shows approximately 1 year and 4 months as an Associate Data Engineer / Analyst, with additional student technician experience but not five years in a data engineer role."
+   },
+   {
+    "req": "Be familiar with data lake, data warehouse and data lake house architectures.",
+    "verdict": "存疑",
+    "note": "AWS RDS pipelines and reporting tables are documented, but data lake, data warehouse, and lakehouse architecture experience is not stated."
+   },
+   {
+    "req": "Be familiar with MDM processes such as golden record creation, survivorship, reconciliation, enrichment, and quality.",
+    "verdict": "存疑",
+    "note": "The resume does not document MDM processes or golden-record management."
+   },
+   {
+    "req": "Experience building and operating large-scale data lakes and data ware houses.",
+    "verdict": "存疑",
+    "note": "Cloud-hosted AWS pipelines are documented, but large-scale data lake or data warehouse delivery and operations are not stated."
+   },
+   {
+    "req": "Experience with Hadoop ecosystem and big data tools, including Spark and Kafka.",
+    "verdict": "存疑",
+    "note": "The resume does not mention Hadoop, Spark, Kafka, or related big-data tools."
+   },
+   {
+    "req": "Experience with Master Data Management (MDM) tools and platforms such as Informatica MDM, Talend Data Catalog, Semarchy xDM, IBM PIM & IKC, or Profisee.",
+    "verdict": "存疑",
+    "note": "No listed experience with the required MDM tools or platforms."
+   },
+   {
+    "req": "Experience in data governance, including data quality management, data profiling, data remediation, and automated data lineage.",
+    "verdict": "存疑",
+    "note": "Quality-assurance platform work is documented, but the specified data-governance practices are not established."
+   },
+   {
+    "req": "Experience with stream-processing systems including Spark-Streaming.",
+    "verdict": "存疑",
+    "note": "The resume documents batch-oriented ingestion and reporting automation but no stream-processing or Spark-Streaming experience."
+   },
+   {
+    "req": "Experience with Delta Lake and Databricks.",
+    "verdict": "存疑",
+    "note": "Neither Delta Lake nor Databricks is listed in the resume."
+   },
+   {
+    "req": "Advanced working experience with relational SQL and NoSQL databases, including Hive, HBase, and Postgres.",
+    "verdict": "存疑",
+    "note": "SQL, Oracle, and AWS RDS are documented, but advanced NoSQL experience and Hive/HBase experience are not stated."
+   },
+   {
+    "req": "A successful history of manipulating, processing, and extracting value from large, disconnected datasets.",
+    "verdict": "存疑",
+    "note": "The resume shows analysis across 17 Oracle tables and automated retailer data ingestion, but does not establish the required large disconnected-dataset scale."
+   },
+   {
+    "req": "Experience applying modern development principles (Scrum, TDD,continuous integration, and code reviews).",
+    "verdict": "存疑",
+    "note": "Git/GitHub CI/CD is listed, but Scrum, TDD, and code-review experience are not stated."
+   },
+   {
+    "req": "Experience with ETL tools such as Talend Big Data, Azure Data Factory,etc.",
+    "verdict": "存疑",
+    "note": "Python-based ingestion and AWS pipelines are documented, but the specified ETL tools are not listed."
+   },
+   {
+    "req": "Experience working with Hortonworks Data Platform or Cloudera Data Platform.",
+    "verdict": "存疑",
+    "note": "No Hortonworks or Cloudera experience is stated."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer @ V-ELEGANT PTE. LTD.",
+ "approved": null
+}

@@ -1,0 +1,73 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "COMBUILDER PTE LTD",
+  "position": "Data Engineer — AMK",
+  "location": "Singapore",
+  "comp_mentions": [
+   "5000–6500 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/engineering/data-engineer-%E2%80%94-amk-combuilder-950c837f705bbaeaa8f592f37816e08e"
+  ],
+  "highlight": "MCF listing 2026-10-14; 5000–6500 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Job Responsibilities: Data Engineering & Platform Development Design and develop scalable and reliable data pipelines. Build enterprise data platforms, including data warehouses, data lakes, and lakehouses. Implement cloud, hybrid, and on-premises data architectures aligned with enterprise standards. ETL/ELT & Data Integration Lead ETL/ELT pipeline development, with Talend as a highly preferred platform. Integrate structured, semi-structured, and unstructured data sources. Implement and maintain data quality, validation, and error-handling frameworks. Data Management & Governance Design and manage data storage solutions with a strong focus on object storage, data quality, and data governance. Implement and maintain data lifecycle management and cost-optimisation strategies. Ensure data lineage, traceability, and auditability. Analytics & BI Enablement Engineer analytics-ready data models for reporting and self-service analytics. Enable BI dashboards, reports, and analytics through performant and governed data pipelines. Security & Compliance Ensure compliance with government security and privacy requirements. Implement and maintain encryption, access controls, secure data handling practices, and system security policies. Job Requirements: Bachelor’s or Master’s degree in Computer Science, Engineering, Data Science, or a related field. Minimum 3 years of experience in enterprise data engineering roles. Strong hands-on data engineering experience. Strong SQL and Python skills. Experience with ETL/ELT tools, with Talend highly preferred. Experience with data warehouses, data lakehouses, data lakes, and object storage systems. Qlik Sense Enterprise integration experience is highly preferred. Prior CAT 1 / G50 security clearance is required. Previous experience delivering MINDEF projects is required.",
+  "skills": [
+   "QlikSense",
+   "Talend",
+   "Data Modelling",
+   "Cloud Computing",
+   "ETL",
+   "Data Integration",
+   "Data Governance",
+   "Data Engineering",
+   "SQL",
+   "Python",
+   "Data Warehousing"
+  ],
+  "min_yoe": 3
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 1,
+  "why": "The role is in Singapore rather than the preferred Houston market, and the candidate does not demonstrate the required three years of enterprise data engineering experience or defense-sector delivery background.",
+  "flags": [
+   "Location mismatch: Singapore vs. Houston preference",
+   "Required CAT 1 / G50 security clearance is not evidenced",
+   "Required MINDEF project experience is not evidenced",
+   "Talend and Qlik Sense experience is not shown, although both are listed as highly preferred rather than mandatory"
+  ],
+  "req_gaps": [
+   {
+    "req": "Minimum 3 years of experience in enterprise data engineering roles.",
+    "verdict": "不符",
+    "note": "The resume shows approximately 1 year and 4 months as an Associate Data Engineer, while the earlier Student Technician experience is not clearly enterprise data engineering."
+   },
+   {
+    "req": "Experience with data warehouses, data lakehouses, data lakes, and object storage systems.",
+    "verdict": "存疑",
+    "note": "AWS RDS and cloud-hosted reporting pipelines are documented, but experience across data warehouses, lakehouses, lakes, and object storage systems is not established."
+   },
+   {
+    "req": "Prior CAT 1 / G50 security clearance is required.",
+    "verdict": "存疑",
+    "note": "No CAT 1 or G50 security clearance is mentioned in the resume."
+   },
+   {
+    "req": "Previous experience delivering MINDEF projects is required.",
+    "verdict": "存疑",
+    "note": "No MINDEF project delivery experience is mentioned in the resume."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer — AMK @ COMBUILDER PTE LTD",
+ "approved": null
+}

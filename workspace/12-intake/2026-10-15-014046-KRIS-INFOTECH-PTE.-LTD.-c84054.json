@@ -1,0 +1,56 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "KRIS INFOTECH PTE. LTD.",
+  "position": "Data Engineer",
+  "location": "Singapore",
+  "comp_mentions": [
+   "8500–13500 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/information-technology/data-engineer-kris-infotech-f17f27e9c9bdd1ff1314110ad3c84054"
+  ],
+  "highlight": "MCF listing 2026-10-12; 8500–13500 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Job Description: You will be responsible for designing, developing, and maintaining data solutions for data generation, collection, and processing. Your day-to-day activities will include creating data pipelines, ensuring data quality, and implementing ETL processes to migrate and deploy data across systems. You are expected to be a subject matter expert, collaborate and manage the team to perform effectively. You will be responsible for team decisions, engage with multiple teams, and contribute to key decisions while providing solutions to problems for your immediate team and across multiple teams. Advanced proficiency in Object Oriented Application Design & Development is required. Advanced proficiency in Test Execution and Management is recommended. Additionally, advanced proficiency in Application Design and Design & Build Enablement is suggested. Develop innovative data solutions that enhance data processing efficiency. Collaborate with cross-functional teams to identify and implement best practices in data management. Conduct regular assessments of data quality and integrity to ensure optimal performance. Lead initiatives to streamline data workflows and improve overall data architecture. Mentor junior team members to foster a culture of continuous learning and improvement. Requirements: Object Oriented Application Design & Development (P3 - Advanced)",
+  "skills": [
+   "Big Data",
+   "Data Pipeline",
+   "Data Solutions",
+   "Agile",
+   "ETL",
+   "Data Engineering",
+   "SQL",
+   "Data Science",
+   "Java",
+   "Test Execution",
+   "Databases"
+  ],
+  "min_yoe": 3
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "The data engineering work is relevant, but the Singapore location conflicts with the Houston preference and the resume does not clearly demonstrate the JD's required advanced object-oriented application design proficiency.",
+  "flags": [
+   "Location mismatch: Singapore role versus Houston preference",
+   "Potential seniority mismatch: JD expects subject-matter expertise and team-level decision-making, while the resume primarily shows Associate Data Engineer/Analyst and Student Technician experience"
+  ],
+  "req_gaps": [
+   {
+    "req": "Object Oriented Application Design & Development (P3 - Advanced)",
+    "verdict": "存疑",
+    "note": "The resume shows Python/C++ application development and Pybind11 integration, but it does not explicitly establish advanced proficiency in object-oriented application design and development."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer @ KRIS INFOTECH PTE. LTD.",
+ "approved": null
+}

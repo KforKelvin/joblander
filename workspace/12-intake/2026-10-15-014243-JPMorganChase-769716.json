@@ -1,0 +1,66 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "JPMorganChase",
+  "position": "Data Engineer III - Python, Databricks",
+  "location": "Houston, TX",
+  "comp_mentions": [],
+  "urls": [
+   "https://www.linkedin.com/jobs/view/data-engineer-iii-python-databricks-at-jpmorganchase-4478769716"
+  ],
+  "highlight": "LinkedIn listing 2026-10-13; Not Applicable",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "linkedin"
+  },
+  "jd_excerpt": "Job Description Join a dynamic team where your unique skills will help build innovative solutions and contribute to a winning culture. You'll have opportunities for career growth, collaborate with talented professionals, and make a real impact on our business objectives. As a Data Engineer III at JPMorgan Chase within our agile team, you will design and deliver reliable data collection, storage, access, and analytics solutions that are secure, stable, and scalable.. You will develop, test, and maintain essential data pipelines and architectures, supporting various business functions to achieve the firm's goals. Working with us, you will use your skills to drive innovation and help shape our team culture. Together, we focus on excellence, collaboration, and continuous improvement. Job Responsibilities Develop workflows and ELT pipelines using Python and Databricks. Support review of controls to ensure sufficient protection of enterprise data. Implement data security using entitlements frameworks. Update logical or physical data models based on new use cases. Use SQL frequently and understand NoSQL databases Uses enterprise-authorized AI capabilities within the work environment to accelerate data pipeline/design analysis and documentation, validating outputs and handling data according to sensitivity and security requirements. Applies reuse-first, AI-assisted practices to strengthen SDLC-quality routines for data pipelines (e.g., test generation and control validation), ensuring traceability/auditability and alignment to resiliency and security expectations. Required Qualifications, Capabilities, And Skills Formal training or certification on software engineering concepts and 3 years applied experience. Good working knowledge of AWS, Databricks, and Python, Experience across the data lifecycle. Advanced at SQL, including joins and aggregations, Working understanding of NoSQL databases. Significant experience with statistical data analysis and ability to determine appropriate tools and data patterns for analysis. Utilize AWS Cloud Services for developing, deploying, and managing applications at scale. Proficiency in AI Coding Assistants, Daily use of tools like Cursor, GitHub Copilot, and Claude to accelerate code generation, documentation, and refactoring. Effective Prompt Engineering, Providing AI models with context, clear goals, relevant source material, and - defined output expectations to generate accurate, usable code. Critical Evaluation & Validation,"
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "linkedin",
+ "fit": {
+  "fit": 2,
+  "why": "Houston and the Python/AWS/SQL pipeline work are relevant, but the role has material gaps around Databricks, NoSQL, statistical analysis, and demonstrated AI-assisted engineering practices.",
+  "flags": [
+   "Data Engineer III seniority may be a stretch given the resume's primarily Associate Data Engineer/Analyst and Student Technician experience",
+   "Required Databricks experience is not shown",
+   "No compensation information provided"
+  ],
+  "req_gaps": [
+   {
+    "req": "Good working knowledge of AWS, Databricks, and Python",
+    "verdict": "存疑",
+    "note": "AWS and Python are documented, but Databricks experience is not shown."
+   },
+   {
+    "req": "Working understanding of NoSQL databases",
+    "verdict": "存疑",
+    "note": "The resume documents Oracle, AWS RDS, and SQL work but does not mention NoSQL databases."
+   },
+   {
+    "req": "Significant experience with statistical data analysis and ability to determine appropriate tools and data patterns for analysis",
+    "verdict": "存疑",
+    "note": "The resume shows market-trend and business reporting analysis, but significant statistical data analysis is not clearly demonstrated."
+   },
+   {
+    "req": "Proficiency in AI Coding Assistants, Daily use of tools like Cursor, GitHub Copilot, and Claude to accelerate code generation, documentation, and refactoring",
+    "verdict": "存疑",
+    "note": "Claude Code is listed as a skill, but daily use and application to coding, documentation, and refactoring are not established."
+   },
+   {
+    "req": "Effective Prompt Engineering, Providing AI models with context, clear goals, relevant source material, and defined output expectations to generate accurate, usable code",
+    "verdict": "存疑",
+    "note": "No prompt-engineering experience is documented in the resume."
+   },
+   {
+    "req": "Critical Evaluation & Validation",
+    "verdict": "存疑",
+    "note": "The resume documents software UAT and workflow validation, but not critical evaluation and validation of AI-generated outputs."
+   }
+  ]
+ },
+ "raw_excerpt": "LINKEDIN Data Engineer · Data Engineer III - Python, Databricks @ JPMorganChase",
+ "approved": null
+}

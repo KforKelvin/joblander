@@ -1,0 +1,56 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "Guidehouse",
+  "position": "Senior Data Engineer",
+  "location": "Houston, TX",
+  "comp_mentions": [],
+  "urls": [
+   "https://www.linkedin.com/jobs/view/senior-data-engineer-at-guidehouse-4469990382"
+  ],
+  "highlight": "LinkedIn listing 2026-10-13; Not Applicable",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "linkedin"
+  },
+  "jd_excerpt": "Job Family Data Science & Analysis Travel Required Up to 10% Clearance Required Ability to Obtain Public Trust What You Will Do Guidehouse seeks a Senior Data Engineer to design, develop, and optimize modern data platforms, pipelines, and cloud-based analytics solutions. The ideal candidate will have hands-on experience building scalable data ecosystems, strong software engineering fundamentals, and the ability to lead technical efforts while collaborating with multidisciplinary teams to deliver mission-critical data solutions. Design, develop, and maintain scalable data pipelines and ETL/ELT processes supporting analytics, reporting, and operational workloads. Build and optimize data architectures, data models, and storage solutions across cloud and hybrid environments. Develop and maintain data engineering solutions using Python, SQL, Spark, and related technologies. Implement and support cloud-native data platforms leveraging AWS, Azure, Databricks, and other modern technologies. Design and implement CI/CD pipelines and DevOps best practices for data engineering workflows. Collaborate with architects, developers, analysts, and business stakeholders to translate requirements into technical solutions. Lead data integration, migration, and modernization initiatives, including legacy system transformation efforts. Ensure data quality, integrity, security, and governance standards are incorporated into solution designs. Monitor, troubleshoot, and optimize data pipelines and production environments to ensure reliability and performance. Mentor junior data engineers and support technical knowledge sharing across project teams. Contribute to technical architecture discussions, technology evaluations, and engineering best practices. Develop and maintain technical documentation including data flows, system designs, deployment procedures, and operational guides. Role contingent upon contract award. What You Will Need U.S. Citizenship or Green Card is required and must be able to OBTAIN and MAINTAIN a Federal or DHS \"PUBLIC TRUST Bachelor's degree in Computer Science, Information Systems, Engineering, Mathematics, Data Science, or a related technical field. THREE (3) or more years in data engineering, software engineering, analytics engineering, or a related discipline. Experience in Python, SQL, and data processing frameworks such as Spark or PySpark. Experience designing, developing, and supporting production-grade data pipelines and ETL/ELT processes. Experience"
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "linkedin",
+ "fit": {
+  "fit": 2,
+  "why": "Houston location and the cloud pipeline, Python, SQL, AWS, Tableau, and automation background are relevant, but the role has a hard Spark/PySpark gap and senior-level expectations.",
+  "flags": [
+   "Role is contingent upon contract award.",
+   "Federal/DHS Public Trust eligibility is not established in the resume.",
+   "Senior-level scope may be a stretch based on the documented experience."
+  ],
+  "req_gaps": [
+   {
+    "req": "U.S. Citizenship or Green Card is required",
+    "verdict": "存疑",
+    "note": "Citizenship or permanent resident status is not stated in the resume."
+   },
+   {
+    "req": "must be able to OBTAIN and MAINTAIN a Federal or DHS \"PUBLIC TRUST",
+    "verdict": "存疑",
+    "note": "Ability to obtain and maintain the required Public Trust clearance is not stated."
+   },
+   {
+    "req": "Experience in Python, SQL, and data processing frameworks such as Spark or PySpark.",
+    "verdict": "不符",
+    "note": "Python and SQL are explicit, but Spark or PySpark experience is not listed."
+   },
+   {
+    "req": "Experience designing, developing, and supporting production-grade data pipelines and ETL/ELT processes.",
+    "verdict": "存疑",
+    "note": "The resume shows an AWS-hosted automated ingestion pipeline, but production-grade ETL/ELT support is not explicitly established."
+   }
+  ]
+ },
+ "raw_excerpt": "LINKEDIN Data Engineer · Senior Data Engineer @ Guidehouse",
+ "approved": null
+}

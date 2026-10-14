@@ -1,0 +1,61 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "XCELLINK PTE. LTD.",
+  "position": "Data Engineer",
+  "location": "Singapore",
+  "comp_mentions": [
+   "5000–7000 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/information-technology/data-engineer-xcellink-48e31626c2d116c43aa3043d2ba8bff2"
+  ],
+  "highlight": "MCF listing 2026-10-12; 5000–7000 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Job Responsibilities Design, develop, and maintain data pipelines and ETL/ELT workflows on cloud data platforms. Develop and optimize data models, data transformations, and workflows using Python and SQL. Support analytics and reporting teams by ensuring data is accurate, reliable, and accessible. Work with stakeholders to understand data requirements and translate them into technical solutions. Monitor, troubleshoot, and improve data pipeline performance and data platform reliability. Prepare and maintain technical documentation. Requirements Degree in Computer Science, Information Technology, Data Engineering, or a related discipline. Up to 4 years of experience in Data Engineering. Hands-on experience with Azure Synapse. Proficient in Python and SQL. Experience building and supporting ETL/ELT pipelines. Good communication and stakeholder engagement skills. Preferred Skills Exposure to Azure cloud services. Experience with Databricks, Snowflake, or Power BI. Exposure to business requirements gathering and process documentation.",
+  "skills": [
+   "Design",
+   "Troubleshooting",
+   "Computer Engineering",
+   "Preparation of Technical Documents",
+   "Data Pipeline",
+   "Data Transformation",
+   "SQL Programming",
+   "Information Technology",
+   "Azure Synapse Analytics",
+   "requirements from stakeholders",
+   "Computer Science",
+   "Reliable",
+   "Stakeholder Engagement",
+   "Data Model Design",
+   "Data Infrastructure"
+  ],
+  "min_yoe": 1
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "The role aligns well with the candidate’s Python/SQL pipeline and BI experience, but Singapore conflicts with the Houston preference and hands-on Azure Synapse experience is not evidenced.",
+  "flags": [
+   "Location mismatch: Singapore rather than Houston",
+   "Required Azure Synapse experience is not shown in the resume",
+   "Compensation is listed in SGD and may not align with the candidate’s expectations"
+  ],
+  "req_gaps": [
+   {
+    "req": "Hands-on experience with Azure Synapse.",
+    "verdict": "存疑",
+    "note": "The resume shows AWS-hosted pipelines and cloud data work, but does not mention Azure Synapse."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer @ XCELLINK PTE. LTD.",
+ "approved": null
+}

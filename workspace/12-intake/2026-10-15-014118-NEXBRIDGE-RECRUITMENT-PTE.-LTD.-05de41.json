@@ -1,0 +1,83 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "NEXBRIDGE RECRUITMENT PTE. LTD.",
+  "position": "Data Engineer | Data Platform & Analytics",
+  "location": "Singapore",
+  "comp_mentions": [
+   "6000–8000 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/consulting/data-engineer-data-platform-analytics-nexbridge-recruitment-e06b119b5be9f6f026a13fde7205de41"
+  ],
+  "highlight": "MCF listing 2026-10-11; 6000–8000 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Job Responsibilities Design, develop and maintain efficient and reliable ETL processes and data pipelines for data ingestion, transformation and integration from multiple source agencies. Develop and maintain modular, production-quality code for statistical production processes while preserving existing business logic and ensuring outputs are accurately reconciled against current production results. Support the migration, modernisation and optimisation of legacy processes to improve efficiency, maintainability and reliability. Design and maintain database schemas, data models and storage structures to support the efficient ingestion, validation, transformation and retrieval of large datasets. Develop reusable data engineering components, including common libraries, configuration frameworks, logging standards and utilities to streamline production workflows. Implement and maintain CI/CD pipelines for data engineering workflows, including automated testing and deployment. Manage workflows across Development, UAT and Production environments to support safe testing, deployment and synchronisation. Design and configure complex data pipeline workflows and schedules, including dependencies, failure handling, recovery and operational monitoring. Establish and maintain version control structures using GitLab, including branching strategies, merge requests, code reviews and technical documentation. Monitor and troubleshoot data pipelines, conduct root-cause analysis and continuously improve system reliability and performance. Collaborate with technical teams, business users and stakeholders to translate business and statistical processing requirements into robust technical solutions. Job Requirements 2 years of professional experience in data engineering, data platform development, software engineering or a related field. Strong proficiency in Python and SQL, with experience in complex data transformations, analysis and data quality monitoring. Hands-on experience with dataframe processing libraries such as Polars or pandas for processing large datasets efficiently. Experience with database management, data warehousing and ETL development for data ingestion and integration. Experience with Git and GitLab, including branching strategies, merge requests, code reviews and CI/CD pipelines. Working knowledge of Linux/Unix environments, shell scripting and command-line tools. Understanding of data governance, access control and security practices. Knowledge of software en",
+  "skills": [
+   "Process Improvement and Optimisation",
+   "Polars",
+   "Git",
+   "Oracle Data Warehouse Etl",
+   "Data Ingestion",
+   "Data Pipeline",
+   "Log Management",
+   "Software Engineering",
+   "Data Quality Assurance",
+   "Access Control Management",
+   "Business Logic",
+   "Managing 3rd party agencies",
+   "Shell Scripts",
+   "Workflow Orchestration",
+   "Deployment Automation"
+  ],
+  "min_yoe": 2
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "The role aligns well with the candidate’s data engineering, Python, SQL, ETL, AWS, and reporting background, but the Singapore location conflicts with the Houston preference and several required platform-operations skills are unproven.",
+  "flags": [
+   "Singapore location conflicts with the Houston preference",
+   "Recruitment agency posting: NEXBRIDGE RECRUITMENT PTE. LTD.",
+   "GitLab-specific workflow experience is not demonstrated",
+   "Shell scripting and command-line experience are not demonstrated",
+   "Data governance, access control, and security experience is not clearly demonstrated"
+  ],
+  "req_gaps": [
+   {
+    "req": "2 years of professional experience in data engineering, data platform development, software engineering or a related field.",
+    "verdict": "存疑",
+    "note": "The resume clearly shows 1 year and 4 months as an Associate Data Engineer / Analyst; the earlier Student Technician experience may not qualify as professional experience."
+   },
+   {
+    "req": "Strong proficiency in Python and SQL, with experience in complex data transformations, analysis and data quality monitoring.",
+    "verdict": "存疑",
+    "note": "Python, SQL, complex reporting queries, and data analysis are explicit, but data quality monitoring is not clearly demonstrated."
+   },
+   {
+    "req": "Experience with Git and GitLab, including branching strategies, merge requests, code reviews and CI/CD pipelines.",
+    "verdict": "存疑",
+    "note": "Git/GitHub and CI/CD are listed, but GitLab, branching strategies, merge requests, and code reviews are not explicitly shown."
+   },
+   {
+    "req": "Working knowledge of Linux/Unix environments, shell scripting and command-line tools.",
+    "verdict": "存疑",
+    "note": "Linux is listed, but shell scripting and command-line tools are not explicitly demonstrated."
+   },
+   {
+    "req": "Understanding of data governance, access control and security practices.",
+    "verdict": "存疑",
+    "note": "The candidate tested permissions in a Salesforce-integrated platform, but broader data governance, access control, and security practices are not clearly established."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Analytics Engineer · Data Engineer | Data Platform & Analytics @ NEXBRIDGE RECRUITMENT PTE. LTD.",
+ "approved": null
+}

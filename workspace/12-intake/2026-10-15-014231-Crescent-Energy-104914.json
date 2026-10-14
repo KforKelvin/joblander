@@ -1,0 +1,51 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "Crescent Energy",
+  "position": "Senior Data Engineer – Upstream Oil & Gas",
+  "location": "Houston, TX",
+  "comp_mentions": [],
+  "urls": [
+   "https://www.linkedin.com/jobs/view/senior-data-engineer-%E2%80%93-upstream-oil-gas-at-crescent-energy-4432104914"
+  ],
+  "highlight": "LinkedIn listing 2026-10-10; Not Applicable",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "linkedin"
+  },
+  "jd_excerpt": "Note: Please select \"Employer not found\" as the company name, if the current or past employer isn't listed. Crescent is a differentiated U.S. energy company committed to delivering value through a disciplined, returns-driven growth through acquisition strategy and consistent return of capital. Our long-life, balanced portfolio combines stable cash flows from low-decline production with a deep, high-quality development inventory. Crescent is a top three producer (by gross operated production) in the Eagle Ford basin. Crescent’s leadership is an experienced team of investment, financial and industry professionals that combines proven investment and operating expertise. For more than a decade, Crescent and our predecessors have executed on a consistent strategy focused on cash flow, risk management and returns. Through disciplined and accretive investments, we have successfully tripled the size of our company since going public in December 2021 while maintaining a strong balance sheet. The Sr. Data Engineer- Operations is responsible for designing, building, and operating scalable, reliable, and secure data pipelines that support enterprise analytics, reporting, and advanced data use cases. This role is critical to enabling data-driven decision-making by ensuring trusted, high-quality data is available across Planning, Subsurface, Land and Marketing domains. This position requires hands-on experience in upstream oil and gas and proven expertise working with enterprise-scale cloud data platforms, with Snowflake (or comparable platforms) as a core prerequisite. The Data Engineer will play a key role in advancing the company’s cloud-based data platform and accelerating its journey toward becoming a data-driven, technology-enabled enterprise. Key Responsibilities Data Engineering & Pipeline Development Design, build, and maintain scalable, fault-tolerant ETL/ELT pipelines supporting structured and semi-structured data across upstream operational, engineering, financial, and ESG domains. Develop and operate data ingestion pipelines using Fivetran (or similar tools), including connector configuration, schema management, and change data capture (CDC) patterns. Engineer and maintain data pipelines within the Snowflake environment, ensuring reliability, performance, and cost efficiency. Monitor, troubleshoot, and remediate data pipeline failures, latency issues, and data inconsistencies in production environments. Implement logging, alerting, and basic observability f"
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "linkedin",
+ "fit": {
+  "fit": 2,
+  "why": "Houston and the data automation focus align, but the résumé does not clearly demonstrate the role’s core upstream oil-and-gas and Snowflake-or-equivalent enterprise data-platform requirements.",
+  "flags": [
+   "Potential upstream oil-and-gas domain mismatch",
+   "Snowflake or comparable enterprise data-platform experience is not clearly demonstrated",
+   "Senior-level scope is not established in the résumé"
+  ],
+  "req_gaps": [
+   {
+    "req": "hands-on experience in upstream oil and gas",
+    "verdict": "存疑",
+    "note": "The résumé shows an EOG Resources internship involving market-trend analysis, but it does not establish hands-on upstream oil-and-gas experience."
+   },
+   {
+    "req": "proven expertise working with enterprise-scale cloud data platforms",
+    "verdict": "存疑",
+    "note": "The résumé documents AWS-hosted RDS pipelines, but enterprise-scale cloud data-platform expertise is not established."
+   },
+   {
+    "req": "Snowflake (or comparable platforms) as a core prerequisite",
+    "verdict": "存疑",
+    "note": "Snowflake is not listed, and the résumé does not clearly identify a comparable enterprise data-platform implementation."
+   }
+  ]
+ },
+ "raw_excerpt": "LINKEDIN Data Engineer · Senior Data Engineer – Upstream Oil & Gas @ Crescent Energy",
+ "approved": null
+}

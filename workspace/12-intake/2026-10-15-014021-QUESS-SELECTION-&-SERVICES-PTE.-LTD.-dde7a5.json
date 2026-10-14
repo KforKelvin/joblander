@@ -1,0 +1,102 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "QUESS SELECTION & SERVICES PTE. LTD.",
+  "position": "Data Engineer",
+  "location": "Singapore",
+  "comp_mentions": [
+   "5000–6800 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/information-technology/data-engineer-quess-selection-services-ba8ac22b4fb04ea2fee5228ff4dde7a5"
+  ],
+  "highlight": "MCF listing 2026-10-12; 5000–6800 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "Key Responsibilities Design, develop, and maintain scalable data pipelines and platform solutions across AWS cloud and hybrid/on-premises environments. Build and optimize ETL/ELT workflows using Python, PySpark, SQL, and cloud-native technologies. Develop and support data lakes, lakehouse architectures, metadata management, search platforms, and AI-enabled services. Implement and maintain CI/CD pipelines, automated testing frameworks, Infrastructure as Code (IaC), and deployment processes. Integrate and support AWS services and platform technologies, including OpenSearch, Amazon Bedrock, AgentCore, and Model Context Protocol (MCP). Monitor and optimize platform reliability, security, performance, observability, and cloud costs. Troubleshoot production issues, perform root cause analysis, and ensure platform stability and operational excellence. Collaborate with cross-functional teams to drive platform modernization, automation, and continuous improvement. Mandatory Requirements 3–5+ years of hands-on experience developing and supporting production-grade data pipelines using SQL, Python, and cloud technologies. Practical experience with AWS cloud services and/or hybrid cloud environments. Strong Linux/Unix administration, shell scripting, and production support capabilities. Solid understanding of data engineering principles, distributed processing, and enterprise platform operations. Technical Skills Data Engineering: ETL/ELT, data lakes, lakehouse architecture, distributed data processing, SQL, Python, PySpark, and Apache Spark. AWS & Cloud Platforms: AWS Glue, EMR, S3, Redshift, Lambda, and Amazon Bedrock. Data & Streaming Technologies: Apache Airflow, dbt, Kafka/MSK, Apache Iceberg, Hive, Trino, and Presto. Search & AI Platforms: OpenSearch, AgentCore, MCP, and AI service integration. DevOps & Platform Engineering: Git, CI/CD, DevOps practices, Infrastructure as Code (IaC), and automated testing. Monitoring & Observability: CloudWatch, Datadog, Grafana, and Prometheus. Preferred Qualifications Experience building and supporting data lake and lakehouse platforms. Knowledge of streaming pipelines and event-driven architectures. Hands-on experience with OpenSearch administration, performance optimization, and tuning. Familiarity with monitoring, logging, alerting, and observability tools. Understanding of data governance, security, access controls, and Personally Identifiable Information (PII) protection. Experience supporting enterprise platforms within b",
+  "skills": [
+   "Distributed Processing",
+   "Amazon Bedrock",
+   "ETL Tools",
+   "Pipeline Management",
+   "Data Pipeline",
+   "AWS",
+   "Platform Modernization",
+   "Search Engine Optimisation (SEO)",
+   "reliability monitoring",
+   "Root Cause Analysis",
+   "Monitoring Concepts",
+   "Cloud Infrastructure",
+   "Production Support",
+   "Data Lake",
+   "Event-Driven Architecture (EDA)"
+  ],
+  "min_yoe": 3
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "Worth a cautious look for AWS/Python/SQL pipeline alignment, but the Singapore location and explicit 3–5+ years requirement are significant mismatches.",
+  "flags": [
+   "Location mismatch: candidate prefers Houston, while the role is in Singapore.",
+   "Recruitment agency/intermediary: QUESS SELECTION & SERVICES PTE. LTD.",
+   "Potential requirement breadth mismatch: the role spans enterprise data platforms, data lakes, distributed processing, and AWS AI/search services beyond the documented experience.",
+   "Compensation is listed as 5000–6800 SGD/month; no candidate compensation threshold was provided."
+  ],
+  "req_gaps": [
+   {
+    "req": "3–5+ years of hands-on experience developing and supporting production-grade data pipelines using SQL, Python, and cloud technologies.",
+    "verdict": "不符",
+    "note": "The resume documents approximately 1 year and 4 months in an Associate Data Engineer / Analyst role with production AWS pipeline work, which is below the stated minimum."
+   },
+   {
+    "req": "Strong Linux/Unix administration, shell scripting, and production support capabilities.",
+    "verdict": "存疑",
+    "note": "Linux is listed as a tool, but Linux/Unix administration, shell scripting, and production support capabilities are not explicitly demonstrated."
+   },
+   {
+    "req": "Solid understanding of data engineering principles, distributed processing, and enterprise platform operations.",
+    "verdict": "存疑",
+    "note": "Data engineering automation is documented, but distributed processing and enterprise platform operations are not explicitly demonstrated."
+   },
+   {
+    "req": "PySpark, and Apache Spark.",
+    "verdict": "存疑",
+    "note": "Python and SQL are documented, but PySpark and Apache Spark are not listed in the resume."
+   },
+   {
+    "req": "AWS Glue, EMR, S3, Redshift, Lambda, and Amazon Bedrock.",
+    "verdict": "存疑",
+    "note": "AWS and an AWS-hosted RDS pipeline are documented, but these named AWS services are not explicitly listed."
+   },
+   {
+    "req": "Apache Airflow, dbt, Kafka/MSK, Apache Iceberg, Hive, Trino, and Presto.",
+    "verdict": "存疑",
+    "note": "No direct experience with these named data and streaming technologies is documented."
+   },
+   {
+    "req": "OpenSearch, AgentCore, MCP, and AI service integration.",
+    "verdict": "存疑",
+    "note": "No direct experience with these named search and AI platforms is documented."
+   },
+   {
+    "req": "Infrastructure as Code (IaC), and automated testing.",
+    "verdict": "存疑",
+    "note": "CI/CD is listed and UAT is documented, but Infrastructure as Code and automated testing frameworks are not explicitly demonstrated."
+   },
+   {
+    "req": "CloudWatch, Datadog, Grafana, and Prometheus.",
+    "verdict": "存疑",
+    "note": "No direct experience with these named monitoring and observability tools is documented."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer @ QUESS SELECTION & SERVICES PTE. LTD.",
+ "approved": null
+}

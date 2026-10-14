@@ -1,0 +1,71 @@
+{
+ "kind": "lead.intake",
+ "lead": {
+  "category": "job_lead",
+  "company": "TALENTSIS PTE. LTD.",
+  "position": "Data Engineer",
+  "location": "Singapore",
+  "comp_mentions": [
+   "5500–7500 SGD/Monthly (MCF listing)"
+  ],
+  "urls": [
+   "https://www.mycareersfuture.gov.sg/job/engineering/data-engineer-talentsis-0c058695ce2e78ee485bf6c13144b64c"
+  ],
+  "highlight": "MCF listing 2026-10-14; 5500–7500 SGD/Monthly (MCF listing)",
+  "suggested_next_step": "Read the JD; apply if it fits",
+  "contact": {
+   "channel": "mcf"
+  },
+  "jd_excerpt": "We are looking for a motivated Data Engineer to design, build, and maintain scalable data pipelines and data platforms that enable efficient data collection, storage, processing, and analytics. You will work closely with data scientists, analysts, and business stakeholders to develop reliable data solutions that support business intelligence, machine learning, and digital transformation initiatives. Key Responsibilities: Design, develop, and maintain ETL/ELT pipelines for structured and unstructured data from multiple sources. Build and optimise scalable data pipelines to support batch, near real-time, and real-time data processing. Develop and maintain data models, data warehouses, and data integration solutions. Collaborate with data scientists and business stakeholders to understand data requirements and deliver high-quality datasets. Monitor data pipelines to ensure reliability, availability, and performance against defined SLAs. Perform data validation, cleansing, and quality assurance to maintain data integrity. Implement data governance, security, and compliance requirements across data platforms. Troubleshoot and resolve data pipeline issues while continuously improving system performance. Support solution implementation, testing, deployment, and post-implementation maintenance. Requirements: Degree in Computer Science, Information Technology, Data Engineering, or a related discipline. 2–5 years of experience in building and maintaining data pipelines and ETL solutions. Hands-on experience with ETL/ELT tools such as Informatica, Talend, or similar platforms. Strong knowledge of SQL and Python. Familiarity with data modelling, metadata management, and data warehousing concepts. Exposure to big data technologies such as Apache Spark, Hadoop, or Hive is advantageous. Experience working with multiple data sources including SQL databases, PostgreSQL, SAP, flat files, APIs, and unstructured data is preferred. Exposure to Power BI, SharePoint, Kubernetes, Docker/Podman, Microservices, or DevSecOps practices will be an added advantage. Strong analytical, problem-solving, and communication skills. (EA Reg No: 20C0312) Please email a copy of your detailed resume to qianyu@talentsis.com.sg for immediate processing. Only shortlisted candidates will be notified.",
+  "skills": [
+   "real-time applications",
+   "PySpark",
+   "Computer Engineering",
+   "Apache Spark",
+   "Data Modelling",
+   "ETL Tools",
+   "Data Pipeline",
+   "Service Level Agreement",
+   "Maintenance of data integrity",
+   "Big Data Analytics",
+   "SQL Programming",
+   "SAP data management",
+   "Apache Hadoop",
+   "PyTorch",
+   "Python"
+  ],
+  "min_yoe": 2
+ },
+ "dedupe": {
+  "verdict": "new"
+ },
+ "source_hint": "mcf",
+ "fit": {
+  "fit": 2,
+  "why": "The role aligns well with the candidate’s data pipeline, SQL, Python, AWS, and BI experience, but its Singapore location conflicts with the Houston preference and the stated pipeline experience may fall short of the 2-year minimum.",
+  "flags": [
+   "Singapore location conflicts with Houston preference",
+   "Likely intermediary recruitment listing (EA registration and recruiter submission email)",
+   "Potential experience-range mismatch: the resume shows approximately 1 year 4 months of explicit data-pipeline experience"
+  ],
+  "req_gaps": [
+   {
+    "req": "2–5 years of experience in building and maintaining data pipelines and ETL solutions.",
+    "verdict": "不符",
+    "note": "The resume shows approximately 1 year 4 months of explicit cloud data-pipeline and ETL-related experience from Mar 2025 to Jul 2026."
+   },
+   {
+    "req": "Hands-on experience with ETL/ELT tools such as Informatica, Talend, or similar platforms.",
+    "verdict": "存疑",
+    "note": "The resume documents Python-based ingestion into AWS RDS and SQL reporting automation, but does not identify a dedicated ETL/ELT platform."
+   },
+   {
+    "req": "Familiarity with data modelling, metadata management, and data warehousing concepts.",
+    "verdict": "存疑",
+    "note": "The resume shows SQL table design and database reporting work, but does not explicitly establish metadata management or data warehousing experience."
+   }
+  ]
+ },
+ "raw_excerpt": "MCF Data Engineer · Data Engineer @ TALENTSIS PTE. LTD.",
+ "approved": null
+}
