@@ -119,7 +119,7 @@
       <input type="text" name="keywords" value="{{ (prefs.get('keywords') or []) | join(', ') }}">
       <label>{{ _('目标公司（一行一家：公司名，或招聘页链接——系统拉它全部在招岗位，挑出适合你的；只想看这几家时关键词可留空）') }}</label>
       <textarea name="targets" style="min-height:80px" placeholder="Stripe&#10;https://jobs.lever.co/example">{{ (prefs.get('targets') or []) | join('\n') }}</textarea>
-      <label>{{ _('地点（逗号分隔）') }}</label>
+      <label>{{ _('地点（逗号分隔；写「Remote United States」= 该地区的远程岗位）') }}</label>
       <input type="text" name="locations" value="{{ (prefs.get('locations') or []) | join(', ') }}">
       <label>{{ _('排除词（命中直接丢弃，不进待入池）') }}</label>
       <input type="text" name="exclude" value="{{ (prefs.get('exclude') or []) | join(', ') }}">

@@ -225,8 +225,13 @@ SCREEN_SYSTEM = """你是求职侦察的初筛员。候选人点名想去下面�
 
 
 def in_locations(job: dict[str, Any], locations: list[str]) -> bool:
+    from joblander.sourcing import parse_location
     loc = (job.get("location") or "").casefold()
-    return not locations or not loc or any(l.casefold() in loc for l in locations)
+
+    def hit(entry: str) -> bool:
+        place, remote = parse_location(entry)
+        return "remote" in loc if remote else place.casefold() in loc
+    return not locations or not loc or any(hit(l) for l in locations)
 
 
 def screen_titles(cfg, llm, company: str, jobs: list[dict[str, Any]],
@@ -310,7 +315,8 @@ def source_targets(cfg, llm, days: int = 2, max_picks: int = MAX_PICKS,
                 st["board_url"] = ATS[board["ats"]]["board"].format(slug=board["slug"])
                 via = "board"
             else:
-                jobs = search_fallback(cfg, name, (locations or ["Singapore"])[0])
+                from joblander.sourcing import parse_location
+                jobs = search_fallback(cfg, name, parse_location((locations or ["Singapore"])[0])[0])
                 via = "fallback"
             run.fetched += len(jobs or [])
             verdict = dedupe(run.rows, name, run.groups)

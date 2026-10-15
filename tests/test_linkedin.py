@@ -65,7 +65,7 @@ def test_source_linkedin_pipeline(tmp_path, monkeypatch):
          "posted": "2099-01-01", "url": "u4"},                       # 已在库
     ]
     calls = []
-    monkeypatch.setattr(S, "linkedin_search", lambda kw, loc, hours=48, start=0:
+    monkeypatch.setattr(S, "linkedin_search", lambda kw, loc, hours=48, start=0, remote=False:
                         calls.append((kw, loc, hours)) or cards)
     monkeypatch.setattr(S, "_li_get", lambda url, timeout=20: DETAIL)
     monkeypatch.setattr("time.sleep", lambda s: None)
@@ -77,6 +77,52 @@ def test_source_linkedin_pipeline(tmp_path, monkeypatch):
     assert prop["source_hint"] == "linkedin" and prop["lead"]["company"] == "NewCo"
     assert prop["fit"]["jd"].startswith("We need")                  # 详情喂给了初筛
     assert S.source_linkedin(cfg, MockLLM([])) == []                 # 幂等：见过的不再提
+
+
+def test_parse_location():
+    assert S.parse_location("Houston") == ("Houston", False)
+    assert S.parse_location("Remote United States") == ("United States", True)
+    assert S.parse_location("remote (US)") == ("US", True)
+    assert S.parse_location("Remote") == ("Worldwide", True)
+    assert S.parse_location("Remoteville") == ("Remoteville", False)
+
+
+def test_source_linkedin_every_location_and_remote(tmp_path, monkeypatch):
+    """每个地点都搜（不只第一个）；「Remote …」走远程筛选；跨地点同一岗位只提一次。"""
+    cfg = _cfg(tmp_path)
+    S.save_prefs(cfg, {"keywords": ["data engineer"],
+                       "locations": ["Houston", "Austin", "Remote United States"]})
+    calls = []
+
+    def search(kw, loc, hours=48, start=0, remote=False):
+        calls.append((loc, remote))
+        return [{"id": "same", "title": "Data Engineer", "company": "NewCo", "location": loc,
+                 "posted": "2099-01-01", "url": "u"},
+                {"id": loc, "title": f"Data Engineer {loc}", "company": f"Co {loc}",
+                 "location": loc, "posted": "2099-01-01", "url": "u"}]
+    monkeypatch.setattr(S, "linkedin_search", search)
+    monkeypatch.setattr(S, "_li_get", lambda url, timeout=20: DETAIL)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    monkeypatch.setattr(S, "assess_fit", lambda cfg, llm, lead, jd_text="": {"fit": 4})
+    outs = S.source_linkedin(cfg, MockLLM([]))
+    assert calls == [("Houston", False), ("Austin", False), ("United States", True)]
+    assert len(outs) == 4                                            # 3 个各地岗 + 共有岗只算一次
+
+
+def test_remote_query_param(monkeypatch):
+    urls = []
+    monkeypatch.setattr(S, "_li_get", lambda url, timeout=20: urls.append(url) or "")
+    S.linkedin_search("data engineer", "United States", remote=True)
+    S.linkedin_search("data engineer", "Houston")
+    assert "f_WT=2" in urls[0] and "f_WT" not in urls[1]
+
+
+def test_target_location_filter_understands_remote():
+    from joblander.targets import in_locations
+    locs = ["Houston", "Remote United States"]
+    assert in_locations({"location": "Houston, TX"}, locs)
+    assert in_locations({"location": "Remote - US"}, locs)
+    assert not in_locations({"location": "Chicago, IL"}, locs)
 
 
 def test_linkedin_off_or_blocked_never_raises(tmp_path, monkeypatch):

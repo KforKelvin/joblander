@@ -179,7 +179,19 @@
    "Source": "linkedin",
    "created": "2026-10-15T16:41:36-05:00",
    "Job URL": "https://www.linkedin.com/jobs/view/automation-specialist-iii-at-nova-401-k-associates-4480136733"
+  },
+  {
+   "notion_page_id": "local-a6cd0fe82eac",
+   "Company": "Dallas Mavericks",
+   "Position": "Business Intelligence Analyst",
+   "Status": "Added",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-15",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T17:14:30-05:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/business-intelligence-analyst-at-dallas-mavericks-4480146460"
   }
  ],
- "pulled_rows": 15
+ "pulled_rows": 16
 }

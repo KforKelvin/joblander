@@ -388,9 +388,22 @@ def parse_linkedin_cards(page: str) -> list[dict[str, str]]:
     return out
 
 
-def linkedin_search(keyword: str, location: str, hours: int = 48, start: int = 0) -> list[dict[str, str]]:
-    q = urllib.parse.urlencode({"keywords": keyword, "location": location,
-                                "f_TPR": f"r{hours * 3600}", "start": start})
+def parse_location(entry: str) -> tuple[str, bool]:
+    """偏好里的一个地点 → (地区, 是否只看远程)。「Remote United States」= 该地区的远程岗；
+    只写「Remote」= 不限地区（Worldwide）。其余原样当城市/地区。"""
+    m = re.fullmatch(r"remote\b[\s:,()\-–—]*(.*?)[\s)]*", (entry or "").strip(), re.I)
+    if m:
+        return (m.group(1).strip() or "Worldwide"), True
+    return (entry or "").strip(), False
+
+
+def linkedin_search(keyword: str, location: str, hours: int = 48, start: int = 0,
+                    remote: bool = False) -> list[dict[str, str]]:
+    params = {"keywords": keyword, "location": location,
+              "f_TPR": f"r{hours * 3600}", "start": start}
+    if remote:
+        params["f_WT"] = 2                        # LinkedIn 工作方式筛选：2 = Remote
+    q = urllib.parse.urlencode(params)
     return parse_linkedin_cards(_li_get(f"{LI_SEARCH}?{q}"))
 
 
@@ -423,9 +436,13 @@ def linkedin_to_lead(card: dict[str, str], detail: dict[str, Any] | None = None,
     return lead
 
 
+MAX_LOCATIONS = 4      # 每词最多搜几个地点：请求数 = 关键词 × 地点，别扎堆
+
+
 def source_linkedin(cfg, llm, days: int = 2, pages_per_kw: int = 1,
                     max_keywords: int = 0) -> list[Path]:
-    """按偏好关键词 × 首选地点抓 LinkedIn 公开职位 → 与 MCF 同一条查重/评分/入池管线。"""
+    """按偏好关键词 × 每个地点（含「Remote …」远程）抓 LinkedIn 公开职位 → 与 MCF 同一条查重/评分/入池管线。
+    跨地点同一岗位由 admit 的 uid / 公司+标题去重。"""
     import time
     from joblander.wizard import features
     run = _Run(cfg, llm, "linkedin", days)
@@ -434,13 +451,15 @@ def source_linkedin(cfg, llm, days: int = 2, pages_per_kw: int = 1,
         keywords = keywords[:max_keywords]
     if not features(cfg)["linkedin"] or not keywords:
         return []
-    loc = (run.prefs.get("locations") or ["Singapore"])[0]
-    for kw in keywords:
+    places = [parse_location(l) for l in (run.prefs.get("locations") or ["Singapore"])
+              if l.strip()][:MAX_LOCATIONS] or [("Singapore", False)]
+    for kw, (loc, remote) in ((k, p) for k in keywords for p in places):
         for page in range(pages_per_kw):
             try:
-                cards = linkedin_search(kw, loc, hours=days * 24, start=page * 10)
+                cards = linkedin_search(kw, loc, hours=days * 24, start=page * 10, remote=remote)
             except Exception as e:
-                run.log.append("sourcing.linkedin_error", "joblander.sourcing", {"kw": kw, "error": str(e)[:200]})
+                run.log.append("sourcing.linkedin_error", "joblander.sourcing",
+                               {"kw": kw, "loc": loc, "remote": remote, "error": str(e)[:200]})
                 break
             run.fetched += len(cards)
             for card in cards:
