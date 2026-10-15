@@ -126,8 +126,13 @@ def build_comp_report(cfg, llm, keywords: list[str] | None = None,
         keywords = (load_prefs(cfg).get("keywords") or [])[:6]
     if not keywords:
         raise ValueError("没有调研关键词——「新机会」页的侦察偏好里填 keywords，或调用时直接给")
+    from joblander.wizard import features
+    use_mcf = features(cfg)["mcf"]
+    if not use_mcf and not (extra_urls or notes.strip()):
+        raise ValueError("MyCareersFuture 已在设置里关闭，薪酬调研没有主数据源——"
+                         "给补充 URL 或贴入材料，或在设置里打开 MCF")
 
-    market = collect_market(keywords)
+    market = collect_market(keywords) if use_mcf else []
     stats = salary_stats(market)
 
     extras: list[str] = []
@@ -173,8 +178,11 @@ def build_comp_report(cfg, llm, keywords: list[str] | None = None,
         narrative or pick(lg, "（无叙事：市场与补充材料均为空）", "(No narrative: no market data or extra material)"),
         "",
         pick(lg, "## 方法与来源", "## Method and sources"),
-        pick(lg, "- 主源：MyCareersFuture 实时搜索（逐岗链接见清单，月薪为雇主自报区间）",
-             "- Source: live MyCareersFuture search (links below; monthly pay is the employer-posted range)"),
+        (pick(lg, "- 主源：MyCareersFuture 实时搜索（逐岗链接见清单，月薪为雇主自报区间）",
+              "- Source: live MyCareersFuture search (links below; monthly pay is the employer-posted range)")
+         if use_mcf else
+         pick(lg, "- 来源：仅补充材料（MyCareersFuture 已关闭）",
+              "- Source: extra material only (MyCareersFuture is turned off)")),
         pick(lg, "- 统计口径：每岗取区间中值；P25/中位/P75 按样本计算",
              "- Each listing counts at its range midpoint; P25 / median / P75 over the sample"),
         pick(lg, "- 时效：岗位数据即抓即用，超过两周建议重跑", "- Freshness: re-run if older than two weeks"),

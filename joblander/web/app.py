@@ -801,7 +801,9 @@ def create_app(with_daemon: bool = True) -> FastAPI:
             p = cfg.workspace_dir / ".credentials" / fn
             creds.append({"label": label, "ok": p.exists(),
                           "note": "已连接" if p.exists() else "未连接"})
-        creds.append({"label": "MyCareersFuture", "ok": True, "note": "公开 API，无需凭证"})
+        from joblander import wizard
+        if wizard.features(cfg)["mcf"]:
+            creds.append({"label": "MyCareersFuture", "ok": True, "note": "公开 API，无需凭证"})
 
         return dict(total_events=n, kinds=sorted(kinds.items(), key=lambda kv: -kv[1]),
                     rules=rules, checks=checks, jobs=jobs, creds=creds, fails24=fails24)
@@ -1114,7 +1116,7 @@ def create_app(with_daemon: bool = True) -> FastAPI:
 
     @app.post("/api/sourcing/scan")
     def api_sourcing_scan(days: int = Form(2)):
-        """立即搜：MCF + LinkedIn（开着的话）同一条查重/评分/入池管线。"""
+        """立即搜：MCF + LinkedIn（各自开着的话）同一条查重/评分/入池管线。"""
         from joblander.sourcing import load_prefs, source_all
         prefs = load_prefs(cfg)
         if not prefs.get("keywords") and not prefs.get("targets"):
@@ -1125,6 +1127,9 @@ def create_app(with_daemon: bool = True) -> FastAPI:
 
     @app.post("/api/mcf/scan")
     def api_mcf_scan(days: int = Form(2)):
+        from joblander import wizard
+        if not wizard.features(cfg)["mcf"]:
+            return JSONResponse({"error": _t("MyCareersFuture 已在设置里关闭")}, status_code=400)
         from joblander.sourcing import source_mcf
         tid = start_task("mcf", "扫 MyCareersFuture",
                          lambda: {"proposals": len(source_mcf(cfg, _llm("flash"), days=days))})

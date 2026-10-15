@@ -42,7 +42,7 @@
   <button class="btn pri" onclick="dlg('dlg-intake')">{{ _('＋ 贴入') }}</button>
 </div>
 <h1>{{ _('新机会') }}</h1>
-<div class="sub">{{ _('每晚 02:30 按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。', src='MyCareersFuture' ~ (_(' 和 LinkedIn') if features.linkedin else '') ~ (_('，以及目标公司的招聘页') if prefs.get('targets') else '')) }}</div>
+<div class="sub">{{ _('每晚 02:30 按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。', src=(('MyCareersFuture' ~ (_(' 和 LinkedIn') if features.linkedin else '')) if features.mcf else ('LinkedIn' if features.linkedin else _('目标公司的招聘页'))) ~ (_('，以及目标公司的招聘页') if prefs.get('targets') and (features.mcf or features.linkedin) else '')) }}</div>
 
 {% if prefs.get('guessed') %}
 <div class="card tint-amber" style="margin-bottom:16px">
@@ -60,7 +60,7 @@
 {% endif %}
 
 <div class="scanbar">
-  <span>{{ _('MCF 上次') }} <b class="num">{% if mcf_last %}{{ mcf_last.ts[:16].replace('T',' ') }}{% else %}—{% endif %}</b></span>
+  {% if features.mcf %}<span>{{ _('MCF 上次') }} <b class="num">{% if mcf_last %}{{ mcf_last.ts[:16].replace('T',' ') }}{% else %}—{% endif %}</b></span>{% endif %}
   {% if features.linkedin %}<span>{{ _('LinkedIn 上次') }} <b class="num">{% if li_last %}{{ li_last.ts[:16].replace('T',' ') }}{% else %}—{% endif %}</b></span>{% endif %}
   {% if prefs.get('targets') %}<span>{{ _('目标公司上次') }} <b class="num">{% if tg_last %}{{ tg_last.ts[:16].replace('T',' ') }}{% else %}—{% endif %}</b></span>{% endif %}
   <button class="btn pri" onclick="post('/api/sourcing/scan',{days:2},{btn:this})">{{ _('↻ 立即搜') }}</button>
@@ -115,7 +115,7 @@
     <form id="prefs" style="display:none">
       <label>{{ _('求职意向（一句话，评分器主要看这个）') }}</label>
       <input type="text" name="intent" value="{{ prefs.get('intent','') }}">
-      <label>{{ _('目标岗位关键词（逗号分隔，MCF / LinkedIn 按这个搜）') }}</label>
+      <label>{{ _('目标岗位关键词（逗号分隔，自动搜索按这个搜）') }}</label>
       <input type="text" name="keywords" value="{{ (prefs.get('keywords') or []) | join(', ') }}">
       <label>{{ _('目标公司（一行一家：公司名，或招聘页链接——系统拉它全部在招岗位，挑出适合你的；只想看这几家时关键词可留空）') }}</label>
       <textarea name="targets" style="min-height:80px" placeholder="Stripe&#10;https://jobs.lever.co/example">{{ (prefs.get('targets') or []) | join('\n') }}</textarea>
@@ -136,8 +136,10 @@
 
   <div class="card">
     <h2 style="margin-top:0">{{ _('渠道') }}</h2>
+    {% if features.mcf %}
     <div class="row"><span class="when">{{ _('自动') }}</span><div class="body"><b>MyCareersFuture</b>
-      <div class="meta">{{ _('每晚 02:30 按偏好关键词抓新岗') }}{% if mcf_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=mcf_last.payload.fetched, b=mcf_last.payload.proposed) }}{% endif %}</div></div></div>
+      <div class="meta">{{ _('每晚 02:30 按偏好关键词抓新岗') }}{% if mcf_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=mcf_last.payload.fetched, b=mcf_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>
+    {% endif %}
     {% if features.linkedin %}
     <div class="row"><span class="when">{{ _('自动') }}</span><div class="body"><b>LinkedIn</b>
       <div class="meta">{{ _('每晚按关键词 × 首选地点搜近 48h 公开职位') }}{% if li_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=li_last.payload.fetched, b=li_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>

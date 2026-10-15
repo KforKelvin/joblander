@@ -183,7 +183,8 @@ def test_daily_sections(tmp_path):
 def test_resolve_intake_text_links(tmp_path, monkeypatch):
     """贴入链接自动解析：MCF 走结构化 API、通用链接抓正文、抓不到明说要原文。"""
     from joblander.scout import resolve_intake_text
-    cfg = Config(raw={"workspace_dir": str(tmp_path / "ws")}, path=tmp_path / "c.yaml")
+    cfg = Config(raw={"workspace_dir": str(tmp_path / "ws"), "features": {"mcf": True}},
+                 path=tmp_path / "c.yaml")
 
     text, src = resolve_intake_text(cfg, "普通来信原文，不是链接", "whatsapp")
     assert (text, src) == ("普通来信原文，不是链接", "whatsapp")   # 非链接原样通过

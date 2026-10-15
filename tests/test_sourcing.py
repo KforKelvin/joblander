@@ -85,7 +85,29 @@ def test_assess_fit_screens_requirements(cfg):
     assert fit["req_gaps"][0]["verdict"] == "不符"
 
 
+def test_mcf_off_by_default_sends_nothing(cfg, monkeypatch):
+    """MCF 开关默认关：搜岗、目标公司退路、贴入链接、薪酬调研、录入补 band 都不发 MCF 请求。"""
+    from joblander.compensation import build_comp_report
+    from joblander.scout import resolve_intake_text
+    from joblander.targets import search_fallback
+    from joblander.wizard import features
+
+    def boom(*a, **k):
+        raise AssertionError("MCF 关着却发了请求")
+    monkeypatch.setattr(sourcing, "mcf_search", boom)
+    monkeypatch.setattr(sourcing, "mcf_job_detail", boom)
+    cfg.raw["features"] = {"linkedin": False}
+    assert features(cfg)["mcf"] is False
+    assert sourcing.source_mcf(cfg, FitLLM(), days=36500) == []
+    assert search_fallback(cfg, "Acme AI", "Singapore") == []
+    with pytest.raises(ValueError, match="MyCareersFuture"):
+        resolve_intake_text(cfg, "https://www.mycareersfuture.gov.sg/job/x-" + "a" * 32)
+    with pytest.raises(ValueError, match="MyCareersFuture"):
+        build_comp_report(cfg, FitLLM(), keywords=["AI Engineer"])
+
+
 def test_source_mcf_proposes_scores_and_dedupes(cfg, monkeypatch):
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     monkeypatch.setattr(sourcing, "mcf_search", lambda kw, limit=20, page=0: [MCF_JOB])
     monkeypatch.setattr(sourcing, "mcf_job_detail", lambda uuid: DETAIL)
     outs = sourcing.source_mcf(cfg, FitLLM(), days=36500)
@@ -99,6 +121,7 @@ def test_source_mcf_proposes_scores_and_dedupes(cfg, monkeypatch):
 
 def test_source_mcf_exclude_and_already_tracked(cfg, monkeypatch):
     """排除词丢弃；已在库公司（含法人名变体）不入池——你已经在打的仗，挂牌岗不是新信息。"""
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     intern = dict(MCF_JOB, uuid="intern0001", title="AI Engineer Intern")
     tracked = dict(MCF_JOB, uuid="dup0000001",
                    postedCompany={"name": "ACME AI SINGAPORE PTE. LTD."},

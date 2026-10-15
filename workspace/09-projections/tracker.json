@@ -1,1 +1,53 @@
-{"rows": []}
+{
+ "rows": [
+  {
+   "notion_page_id": "local-d3f925ac3a26",
+   "Company": "Par Pacific Holdings, Inc.",
+   "Position": "Data & AI Analyst",
+   "Status": "Applied",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-13",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T02:15:49+08:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/data-ai-analyst-at-par-pacific-holdings-inc-4478713975"
+  },
+  {
+   "notion_page_id": "local-7b49e88c0587",
+   "Company": "METECS",
+   "Position": "Full Stack Web Application Developer",
+   "Status": "Applied",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-14; Not Applicable",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T02:15:54+08:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/full-stack-web-application-developer-at-metecs-4479566686"
+  },
+  {
+   "notion_page_id": "local-442468638eac",
+   "Company": "Chewy",
+   "Position": "Business Intelligence Analyst I",
+   "Status": "Applied",
+   "Priority": "Low",
+   "Highlight": "Chewy Business Intelligence Analyst I — SQL, Tableau, fulfillment analytics; $57,000 - $85,500.00 base",
+   "Next Steps": "Review the role requirements and apply through the LinkedIn posting or Chewy careers site.",
+   "Source": "linkedin",
+   "created": "2026-10-15T02:22:03+08:00",
+   "Job URL": "https://careers.chewy.com/us/en/job/CHINUSR31111EXTERNALENUS/Business-Intelligence-Analyst-I?utm_source=linkedin&utm_medium=phenom-feeds?gh_src=o8ua3y1"
+  },
+  {
+   "notion_page_id": "local-c965ce0205ac",
+   "Company": "Goodwill Houston",
+   "Position": "Data Analyst",
+   "Status": "Applied",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-13; Not Applicable",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T08:05:01+08:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/data-analyst-at-goodwill-houston-4476608006"
+  }
+ ],
+ "pulled_rows": 8
+}

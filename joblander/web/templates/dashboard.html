@@ -13,7 +13,7 @@
 <div class="note" style="margin:-14px 0 16px">{{ _('数据源：') }}
   {%- if conn.calendar %} {{ _('Google 日历') }} {{ fresh.get('calendar') or '—' }}（↻30min）｜{% endif %}
   {%- if conn.gmail %} Gmail {{ fresh.get('gmail') or '—' }}（↻30min）｜{% endif %}
-  {{ _('战线・公司档案・提案・日记 = 实时') }} ｜ MCF{{ ' + LinkedIn' if features.linkedin }} {{ _('每晚 02:30 进') }}<a href="/sourcing">{{ _('新机会') }}</a></div>
+  {{ _('战线・公司档案・提案・日记 = 实时') }}{% if features.mcf or features.linkedin %} ｜ {{ ((['MCF'] if features.mcf else []) + (['LinkedIn'] if features.linkedin else [])) | join(' + ') }} {{ _('每晚 02:30 进') }}<a href="/sourcing">{{ _('新机会') }}</a>{% endif %}</div>
 
 <h2 style="margin-top:14px">{{ icon('calendar', 15) }}{{ _('近 4 天场次') }}</h2>
 <div class="card{% if cal_days[0].events %} tint-blue{% endif %}">

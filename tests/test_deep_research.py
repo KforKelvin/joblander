@@ -457,6 +457,7 @@ def test_html_to_md_keeps_block_structure():
 def test_diligence_mcf_salary_page(cfg, monkeypatch):
     """MCF 结构化薪酬进尽调：该公司挂牌岗位成一页证据（别家的岗过滤掉），
     tier 标「MCF·官方挂牌」；MCF 不可用（autouse 缺省）不阻塞照常检索。"""
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     monkeypatch.setattr("joblander.sourcing.mcf_search", lambda kw, limit=16, timeout=10: [
         {"title": "Senior Data Engineer", "postedCompany": {"name": "ACME AI PTE. LTD."},
          "salary": {"minimum": 9000, "maximum": 15000,

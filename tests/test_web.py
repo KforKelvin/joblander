@@ -193,7 +193,7 @@ def test_approvals_live_where_they_belong(client):
     assert "待入池" in src and "NewCo" in src and "否决所选" in src
     assert "scanbar" in src and "↻ 立即搜" in src
     assert "↻ 扫邮箱" not in src                          # 没连 Gmail 不给按钮
-    assert "MCF 上次" in src and "入库" in src            # 工具条时间 + 每条线索入库时间
+    assert "MCF 上次" not in src and "入库" in src        # MCF 默认关不显示；每条线索入库时间
     assert "⛔ fluent Thai" in src                         # requirements 初筛高亮
     assert "NewCo" not in client.get("/pipeline").text    # 机会页只管已有申请
     co = client.get("/company/aaa111").text
@@ -985,6 +985,7 @@ def test_company_referral_endpoint(client, tmp_path, monkeypatch):
 
 def test_comp_research_endpoint(client, tmp_path, monkeypatch):
     """W4 端点：任务化出报告，参谋部列表可见、/comp 路由可读。"""
+    assert client.post("/api/settings/features", data={"name": "mcf", "on": "1"}).status_code == 200
     monkeypatch.setattr("joblander.sourcing.mcf_search", lambda kw, limit=30: [
         {"uuid": "x1", "title": "AI Engineer", "postedCompany": {"name": "A"},
          "salary": {"minimum": 9000, "maximum": 13000,

@@ -181,7 +181,7 @@ def resolve(cfg, entry: str, cache: dict[str, Any]) -> tuple[dict[str, Any], lis
 # ---------- 退路：按公司名搜公开渠道 ----------
 
 def search_fallback(cfg, name: str, loc: str) -> list[dict[str, Any]]:
-    """认不出招聘系统的公司：LinkedIn（开着的话）+ MCF 用公司名搜，只留公司名对得上的。"""
+    """认不出招聘系统的公司：LinkedIn + MCF（各自开着的话）用公司名搜，只留公司名对得上的。"""
     from joblander import sourcing
     from joblander.scout import _name_tokens
     from joblander.wizard import features
@@ -199,6 +199,8 @@ def search_fallback(cfg, name: str, loc: str) -> list[dict[str, Any]]:
                       "jd": "", "li_id": c["id"]} for c in cards if match(c["company"])]
             if len(cards) < 10:
                 break
+    if not features(cfg)["mcf"]:
+        return jobs
     try:
         for j in sourcing.mcf_search(name, limit=50):
             co = (j.get("postedCompany") or {}).get("name") or ""

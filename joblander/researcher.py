@@ -306,8 +306,10 @@ def diligence(cfg, llm, company: str, context: str = "", jd_text: str = "",
             pinned += 1
 
     # MCF 结构化薪酬证据（不算喂料——零输入照样盲扫）：搜不到就算了，不阻塞
+    from joblander.wizard import features
     pos = re.search(r"目标岗位：([^；;]+)", context or "")
-    mcf = _mcf_salary_page(company, position=pos.group(1).strip() if pos else "")
+    mcf = (_mcf_salary_page(company, position=pos.group(1).strip() if pos else "")
+           if features(cfg)["mcf"] else None)
     if mcf is not None:
         pages.append(mcf)
 

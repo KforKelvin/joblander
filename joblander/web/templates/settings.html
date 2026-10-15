@@ -67,6 +67,9 @@
       <option value="zh" {{ 'selected' if lang == 'zh' }}>中文</option>
       <option value="en" {{ 'selected' if lang == 'en' }}>English</option>
     </select></div>
+  <div class="row"><div class="body"><b>{{ _('MyCareersFuture（新加坡）') }}</b>
+    <div class="meta">{{ _('按求职偏好每晚搜 MyCareersFuture 新岗位，并用它的挂牌薪资做薪酬调研、尽调证据和市场参考。关着时不向 MCF 发任何请求。') }}</div></div>
+    <label class="switch"><input type="checkbox" {{ 'checked' if features.mcf }} onchange="post('/api/settings/features',{name:'mcf',on:this.checked?1:0},{ok:this.checked?{{ _('已开启')|jsq }}:{{ _('已关闭')|jsq }},reload:true})"><span></span></label></div>
   <div class="row"><div class="body"><b>{{ _('LinkedIn 职位自动搜索') }}</b>
     <div class="meta">{{ _('按求职偏好每晚搜一次 LinkedIn 公开职位（免登录接口），和 MCF 一起打分入池。接口随时可能被 LinkedIn 调整或限流。') }}</div></div>
     <label class="switch"><input type="checkbox" {{ 'checked' if features.linkedin }} onchange="post('/api/settings/features',{name:'linkedin',on:this.checked?1:0},{ok:this.checked?{{ _('已开启')|jsq }}:{{ _('已关闭')|jsq }}})"><span></span></label></div>

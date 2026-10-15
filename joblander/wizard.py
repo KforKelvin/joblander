@@ -236,7 +236,9 @@ def save_basics(cfg, target_tc: float, currency: str, redlines: list[str]) -> No
 # ---------- 功能开关 ----------
 # 练兵场偏计算机岗，默认关；关着时代码执行端点直接拒（不只是藏入口）。
 # LinkedIn 抓取走免登录的公开职位接口（条款灰区），默认开、可关。
-FEATURES = {"drill": False, "linkedin": True}
+# MyCareersFuture（新加坡）默认关：关着时不发任何 MCF 请求——搜岗、目标公司退路、
+# 薪酬调研、尽调薪资证据、贴入 MCF 链接都跳过。
+FEATURES = {"drill": False, "linkedin": True, "mcf": False}
 
 
 def features(cfg) -> dict[str, bool]:

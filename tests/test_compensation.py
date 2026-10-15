@@ -57,6 +57,7 @@ def test_salary_stats_quantiles():
 
 def test_build_comp_report_end_to_end(cfg, monkeypatch):
     """报告：日期头 + 零 LLM 统计表 + 锚点只出百分比 + 叙事 + 样本清单。"""
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     monkeypatch.setattr("joblander.sourcing.mcf_search",
                         lambda kw, limit=30: MCF_JOBS)
     seen = {}

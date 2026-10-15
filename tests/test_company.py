@@ -547,6 +547,7 @@ def test_jd_removed_tombstone_blocks_mining(cfg, monkeypatch):
 def test_mine_jd_mcf_link_via_structured_api(cfg, monkeypatch):
     """MCF 链接现抓走结构化 API——页面是 SPA 裸抓只有壳（2026-08-12 某支付公司
     报障：明明有 JD 链接，评估却说缺 JD 原文）；薪资/年限/技能随详情一起入档。"""
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     monkeypatch.setattr("joblander.sourcing.mcf_job_detail", lambda uid, timeout=20: {
         "title": "Senior AI Engineer",
         "postedCompany": {"name": "PAYCORP (SINGAPORE) PTE. LTD."},

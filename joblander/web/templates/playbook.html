@@ -105,11 +105,11 @@
 </div>
 {% endfor %}
 
-<h2>{{ _('薪酬调研') }} <span class="note" style="text-transform:none;letter-spacing:0">{{ _('W4 · MCF 实时 band + 统计层零 LLM + 叙事层引用逐岗来源 · 数据超两周建议重跑') }}</span></h2>
+<h2>{{ _('薪酬调研') }} <span class="note" style="text-transform:none;letter-spacing:0">{{ _('W4 · MCF 实时 band + 统计层零 LLM + 叙事层引用逐岗来源 · 数据超两周建议重跑') if features.mcf else _('W4 · 基于你给的补充 URL / 材料 · 统计层零 LLM') }}</span></h2>
 <div class="grid2">
   <div class="card">
     <h2 style="margin-top:0">{{ _('发起调研') }}</h2>
-    <div class="note" style="margin-bottom:8px">{{ _('默认用「新机会」页侦察偏好里的关键词搜 MCF；可临时覆盖。levels.fyi/Glassdoor 等登录站点把内容贴进材料框。锚点对照只显示相对百分比，报告可安全分享。') }}</div>
+    <div class="note" style="margin-bottom:8px">{{ _('默认用「新机会」页侦察偏好里的关键词搜 MCF；可临时覆盖。levels.fyi/Glassdoor 等登录站点把内容贴进材料框。锚点对照只显示相对百分比，报告可安全分享。') if features.mcf else _('MyCareersFuture 已在设置里关闭，报告只基于下面的补充 URL 和贴入材料（至少给一样）。levels.fyi/Glassdoor 等登录站点把内容贴进材料框。') }}</div>
     <label>{{ _('关键词（逗号分隔，空 = 用侦察偏好）') }}</label>
     <input id="cp-kw" placeholder="AI Engineer, LLM Engineer, Forward Deployed">
     <label>{{ _('补充 URL（一行一个，可空）') }}</label><textarea id="cp-urls" style="min-height:52px"></textarea>
@@ -119,7 +119,7 @@
   <div class="card">
     <h2 style="margin-top:0">{{ _('历史报告') }}</h2>
     {% for c in comp_reports %}<div class="row"><div class="body"><a href="/comp/{{ c }}">{{ c }}</a></div></div>
-    {% else %}<div class="note">{{ _('还没跑过。左边发起第一份——按你的求职意向抓 MCF 实时薪资，出带日期的结构化报告。') }}</div>{% endfor %}
+    {% else %}<div class="note">{{ _('还没跑过。左边发起第一份——按你的求职意向抓 MCF 实时薪资，出带日期的结构化报告。') if features.mcf else _('还没跑过。左边给补充材料发起第一份。') }}</div>{% endfor %}
   </div>
 </div>
 

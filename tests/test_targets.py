@@ -122,6 +122,7 @@ def test_already_tracked_company_costs_nothing(cfg, monkeypatch):
 
 
 def test_guessed_slug_of_another_company_is_rejected_then_falls_back(cfg, monkeypatch):
+    cfg.raw["features"] = {**(cfg.raw.get("features") or {}), "mcf": True}
     fake_net(monkeypatch, {"/boards/kite/": {"jobs": [dict(GH["jobs"][0], company_name="Kite Realty")]}})
     monkeypatch.setattr(sourcing, "mcf_search", lambda kw, limit=50: [
         {"uuid": "u" * 32, "title": "AI Engineer", "postedCompany": {"name": "KITE PTE. LTD."},

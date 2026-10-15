@@ -314,6 +314,9 @@ class _Run:
 def source_mcf(cfg, llm, days: int = 2, limit_per_kw: int = 20,
                max_keywords: int = 0) -> list[Path]:
     """按偏好关键词抓 MCF 新岗 → 查重 → fit 评估 → 入池提案。幂等（uuid 去重）。"""
+    from joblander.wizard import features
+    if not features(cfg)["mcf"]:
+        return []
     run = _Run(cfg, llm, "mcf", days)
     keywords = run.prefs.get("keywords") or []
     if max_keywords:

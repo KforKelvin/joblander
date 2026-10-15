@@ -153,6 +153,9 @@ def resolve_intake_text(cfg, text: str, source_hint: str = "paste") -> tuple[str
         return text, source_hint
     m = re.search(r"mycareersfuture\.gov\.sg/\S*?([0-9a-f]{32})", t)
     if m:
+        from joblander.wizard import features
+        if not features(cfg)["mcf"]:
+            raise ValueError("MyCareersFuture 已在设置里关闭——把 JD 原文贴进来吧")
         from joblander.sourcing import _strip_html, mcf_job_detail
         try:
             d = mcf_job_detail(m.group(1))
@@ -241,7 +244,8 @@ def intake(cfg, llm, raw_text: str, source_hint: str = "paste",
         fit = assess_fit(cfg, llm, lead, jd_text=raw_text)   # 来信原文常含 JD 要求
     except Exception:
         fit = {}
-    if not lead.get("comp_mentions") and lead.get("position"):
+    from joblander.wizard import features
+    if not lead.get("comp_mentions") and lead.get("position") and features(cfg)["mcf"]:
         try:                                      # 对方没报薪资 → 补市场 band（决策要有数）
             from joblander.sourcing import market_band
             ref = market_band(lead["position"])
