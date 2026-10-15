@@ -7,10 +7,6 @@ EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture 已在设置里关闭': 'MyCareersFuture is turned off in Settings',
  '目标公司的招聘页': 'your target companies’ careers pages',
  '目标岗位关键词（逗号分隔，自动搜索按这个搜）': 'Target job keywords (comma-separated; automatic searches use these)',
- 'W4 · 基于你给的补充 URL / 材料 · 统计层零 LLM': 'W4 · built from the extra URLs / material you provide · zero-LLM statistics',
- 'MyCareersFuture 已在设置里关闭，报告只基于下面的补充 URL 和贴入材料（至少给一样）。levels.fyi/Glassdoor 等登录站点把内容贴进材料框。':
-     'MyCareersFuture is turned off in Settings, so the report uses only the extra URLs and pasted material below (give at least one). For sign-in sites like levels.fyi / Glassdoor, paste the content into the material box.',
- '还没跑过。左边给补充材料发起第一份。': 'Nothing yet. Give some extra material on the left to run the first one.',
  'AI 额度已用完——生成类功能暂停。<a href="/settings#account">查看额度</a>，或找邀请你的朋友加额度。':
      'AI credit used up — generation is paused. <a href="/settings#account">See credit</a>, or ask the friend who invited you for more.',
  '评分、定制简历、brief 等 AI 生成按实际用量扣；用完找邀请你的朋友加。':
