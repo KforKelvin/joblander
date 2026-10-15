@@ -73,6 +73,9 @@ RESUME_SYSTEM = """你是候选人的简历定制官——根据弹药库（战�
 - 该公司情报（尽调摘要/时间线摘录）只用来判断定位角度和取舍——哪块背景该强调、
   哪块该压缩、Publications 这类可选段留不留；里面的公司背景、第三方推断、薪酬信号
   绝不能当成候选人自己的战绩或经历写进简历，弹药库之外的"事实"一律不算数
+- 版面硬约束：整份简历必须排进一页（系统按 9–10pt 字号排版，一页大约容得下 450–550 个英文词：
+  通常 3–4 段经历、每段 3–5 条 bullet、Summary 2–3 句）。超页时系统会先压版式，压到底仍超
+  才会回来让你再砍——所以宁可一开始就按一页取舍
 - 战绩取舍：与 JD + 该公司情报共同指向的方向最相关的经历/条目前置、展开；
   无关的压缩或删除，版面紧张时可以把弱相关的早期经历合并成一条「Earlier Experience」——
   版面没紧张就不要为了"看起来精炼"硬砍，取舍要有依据，不是为砍而砍
@@ -143,6 +146,43 @@ def _to_pdf(html_path: Path) -> Path | None:
         return pdf if pdf.exists() else None
     except Exception:
         return None
+
+
+def _pdf_pages(pdf: Path) -> tuple[int, int]:
+    """(页数, 末页词数)。读不出返回 (0, 0)——当作未知，不触发任何压缩/重写。"""
+    try:
+        from pypdf import PdfReader
+        pages = PdfReader(str(pdf)).pages
+        return len(pages), len((pages[-1].extract_text() or "").split()) if len(pages) > 1 else 0
+    except Exception:
+        return 0, 0
+
+
+def _fit_one_page(out: Path, content: dict[str, Any], profile: dict[str, Any],
+                  paper: str) -> tuple[str, Path | None, int, int]:
+    """逐档收紧版式直到一页（零 LLM）。返回 (最终 HTML, pdf, 页数, 末页词数)；
+    没有 Chrome 就只出第 0 档 HTML，页数记 0（未知）。"""
+    html, pdf, pages, spill = "", None, 0, 0
+    for density in range(len(DENSITY_CSS)):
+        html = _render_html(content, profile, paper=paper, density=density)
+        out.write_text(html, encoding="utf-8")
+        pdf = _to_pdf(out)
+        if pdf is None:
+            return html, None, 0, 0
+        pages, spill = _pdf_pages(pdf)
+        if pages <= 1:
+            break
+    return html, pdf, pages, spill
+
+
+TRIM_PROMPT = """上一版内容在最紧凑的版式下仍然排到了 {pages} 页（最后一页约 {spill} 个词溢出）。
+简历必须严格一页。在不违反任何事实纪律的前提下精简，至少砍掉约 {cut} 个词：
+优先删弱相关经历里证据最弱的 bullet、把早期经历合并成一条「Earlier Experience」、
+压短过长的 bullet 与 Summary、Publications 可整体删；与 JD 最相关、带数字的战绩不要动。
+输出同一个 JSON schema 的完整内容（不是增量），changes 里补一条说明这次为一页砍了什么。
+
+【上一版内容】
+{prev}"""
 
 
 def _load_profile(cfg) -> dict[str, Any]:
@@ -255,8 +295,36 @@ SKELETON_CSS = """
 """
 
 
-def _render_html(content: dict[str, Any], profile: dict[str, Any]) -> str:
-    """结构化内容 + 固定身份 → 完整 HTML。样式/骨架代码保证一致，定制官管不到这层。"""
+# 一页硬约束的版式档位：超页时逐档收紧（字号、行距、页边距、段间距），零 LLM。
+# 字号到 9pt 为止——再小招聘方读着费劲，剩下的交给定制官砍内容。
+DENSITY_CSS = [
+    "",
+    """body { font-size: 9.8pt; line-height: 1.4; } @page { margin: 11mm 13mm; }
+  h2 { margin: 10px 0 5px; } .role { margin-bottom: 8px; } li { margin-bottom: 2.5px; }""",
+    """body { font-size: 9.5pt; line-height: 1.35; } @page { margin: 10mm 12mm; } h1 { font-size: 22pt; }
+  h2 { margin: 8px 0 4px; } .role { margin-bottom: 6px; } li { margin-bottom: 2px; }
+  .summary p { margin-bottom: 4px; }""",
+    """body { font-size: 9.2pt; line-height: 1.3; } @page { margin: 8mm 11mm; } h1 { font-size: 20pt; }
+  .tagline { margin-bottom: 4px; } h2 { margin: 7px 0 3px; padding-bottom: 2px; }
+  .role { margin-bottom: 5px; } li { margin-bottom: 1.5px; } ul { margin-top: 2px; }
+  .summary p { margin-bottom: 3px; } .edu { margin-bottom: 4px; }""",
+    """body { font-size: 9pt; line-height: 1.27; } @page { margin: 7mm 10mm; } h1 { font-size: 19pt; }
+  .tagline { margin-bottom: 3px; } .contact { padding-top: 4px; } h2 { margin: 6px 0 3px; padding-bottom: 2px; }
+  .role { margin-bottom: 4px; } li { margin-bottom: 1px; } ul { margin-top: 1px; }
+  .summary p { margin-bottom: 2px; } .edu { margin-bottom: 3px; }""",
+]
+PAPERS = {"a4": "A4", "letter": "letter"}
+
+
+def _paper(cfg) -> str:
+    """config.yaml 的 resume.paper：A4（默认）或 Letter（美国投递）。"""
+    return PAPERS.get(str((cfg.raw.get("resume") or {}).get("paper") or "A4").casefold(), "A4")
+
+
+def _render_html(content: dict[str, Any], profile: dict[str, Any], *,
+                 paper: str = "A4", density: int = 0) -> str:
+    """结构化内容 + 固定身份 → 完整 HTML。样式/骨架代码保证一致，定制官管不到这层。
+    paper / density 只动纸张与松紧（一页硬约束），不动版式结构。"""
     name = _esc(profile.get("name"))
     tagline = _esc(content.get("tagline"))
     contact_html = _contact_html(profile.get("contact") or [])
@@ -312,7 +380,9 @@ def _render_html(content: dict[str, Any], profile: dict[str, Any]) -> str:
 <head>
 <meta charset="utf-8">
 <title>{name} — {tagline}</title>
-<style>{SKELETON_CSS}</style>
+<style>{SKELETON_CSS}
+  @page {{ size: {paper}; }}
+  {DENSITY_CSS[max(0, min(density, len(DENSITY_CSS) - 1))]}</style>
 </head>
 <body>
 <div class="page">
@@ -398,10 +468,10 @@ def customise(cfg, llm, company: str, *, jd: str = "", feedback: str = "",
         raise ValueError("Agent 产出不是合法定制内容——重试一次") from None
     if not isinstance(raw, dict) or not raw.get("experience"):
         raise ValueError("Agent 产出不是合法定制内容——重试一次")
-    changes = [str(x).strip() for x in (raw.get("changes") or []) if str(x).strip()][:8]
-
-    out_html = _render_html(raw, profile)
-    verdict = Sentinel.from_config(cfg).check(out_html)
+    # 先过一遍红线再碰磁盘：被拦的内容连临时文件都不落
+    sentinel = Sentinel.from_config(cfg)
+    paper = _paper(cfg)
+    verdict = sentinel.check(_render_html(raw, profile, paper=paper))
     if verdict.action.value == "block":
         raise ValueError(f"红线拦截，拒绝落盘：{verdict.explain()}")
 
@@ -409,19 +479,36 @@ def customise(cfg, llm, company: str, *, jd: str = "", feedback: str = "",
     d = resume_dir(cfg, company)
     d.mkdir(parents=True, exist_ok=True)
     out = d / f"resume-v{n}.html"
-    out.write_text(out_html, encoding="utf-8")
-    pdf = _to_pdf(out)
+    _html, pdf, pages, spill = _fit_one_page(out, raw, profile, paper)
+    if pages > 1:
+        # 版式压到底仍超页：页数是循环外的新信息（不是自评），值得让定制官再砍一次——只一次
+        try:
+            trimmed = json.loads(_strip_fences(llm.generate(
+                prompt + "\n\n" + TRIM_PROMPT.format(
+                    pages=pages, spill=spill, cut=max(40, int(spill * 1.3)),
+                    prev=json.dumps(raw, ensure_ascii=False)),
+                system=RESUME_SYSTEM, json_mode=True)))
+        except (json.JSONDecodeError, ValueError):
+            trimmed = None
+        if isinstance(trimmed, dict) and trimmed.get("experience"):
+            v2 = sentinel.check(_render_html(trimmed, profile, paper=paper))
+            if v2.action.value != "block":
+                raw, verdict = trimmed, v2
+                _html, pdf, pages, spill = _fit_one_page(out, raw, profile, paper)
+        # 砍不出合格内容就保留上一版最紧凑档（盘上已是它），页数如实记进版本
+    changes = [str(x).strip() for x in (raw.get("changes") or []) if str(x).strip()][:8]
 
     ver = {"v": n, "file": f"resume-v{n}", "at": datetime.now(SGT).strftime("%Y-%m-%d %H:%M"),
            "note": (feedback if feedback else _version_note(cfg, n))[:120],
-           "changes": changes, "pdf": bool(pdf), "sentinel": verdict.action.value}
+           "changes": changes, "pdf": bool(pdf), "pages": pages, "sentinel": verdict.action.value}
     state.setdefault("versions", []).append(ver)
     state["current"] = ver["file"]
     state["feedback"] = fb
     save_meta(cfg, company, {"resume": state})
     EventLog(cfg.workspace_dir / "08-events" / "event-log.jsonl").append(
         "resume.customised", "agent:resume_customiser",
-        {"company": company, "v": n, "feedback": bool(fb), "pdf": bool(pdf), "jd_chars": len(jd or "")})
+        {"company": company, "v": n, "feedback": bool(fb), "pdf": bool(pdf), "pages": pages,
+         "jd_chars": len(jd or "")})
     return {"version": ver, "html": str(out),
             "pdf": str(pdf) if pdf else "", "sentinel": verdict.action.value}
 

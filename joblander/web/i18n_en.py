@@ -3,6 +3,8 @@
 EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture（新加坡）': 'MyCareersFuture (Singapore)',
  '停止': 'Stop',
+ '（{n} 页——压到最紧、AI 也砍过一轮仍超，给教练说砍哪段）':
+     '({n} pages — still over after the tightest layout and one AI trim; tell the coach what to cut)',
  '停止中…': 'Stopping…',
  ' 已停止': ' stopped',
  '这个任务不能停止或已结束': 'This task can’t be stopped or has already finished',

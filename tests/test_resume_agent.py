@@ -172,3 +172,50 @@ def test_reset_clears_versions_and_feedback(cfg, tmp_path):
     arch = [d for d in (tmp_path / "ws" / "18-companies" / "Acme" / "resume").iterdir()
             if d.is_dir() and d.name.startswith("archive-")]
     assert arch and any(f.name == "resume-v1.html" for f in arch[0].iterdir())
+
+
+def _fake_pdf(monkeypatch, pages_seq):
+    """假 Chrome：每次转 PDF 吐出 pages_seq 里的下一个 (页数, 末页词数)，记下每次的 HTML。"""
+    seq, seen = list(pages_seq), []
+
+    def to_pdf(p):
+        seen.append(p.read_text(encoding="utf-8"))
+        pdf = p.with_suffix(".pdf")
+        pdf.write_bytes(b"%PDF")
+        return pdf
+    monkeypatch.setattr(ra, "_to_pdf", to_pdf)
+    monkeypatch.setattr(ra, "_pdf_pages", lambda pdf: seq.pop(0) if len(seq) > 1 else seq[0])
+    return seen
+
+
+def test_one_page_by_tightening_layout_without_llm(cfg, monkeypatch):
+    """超页先逐档收紧版式（零 LLM）；纸张跟 config 走；页数记进版本。"""
+    cfg.raw["resume"] = {"paper": "Letter"}
+    seen = _fake_pdf(monkeypatch, [(2, 40), (2, 15), (1, 0)])
+    llm = L()
+    out = ra.customise(cfg, llm, "Acme", jd="need agents")
+    assert len(llm.prompts) == 1                                   # 没为一页多花 LLM
+    assert out["version"]["pages"] == 1 and len(seen) == 3
+    assert "size: letter" in seen[-1] and ra.DENSITY_CSS[2] in seen[-1]
+    assert ra.DENSITY_CSS[2] in open(out["html"], encoding="utf-8").read()   # 盘上是能排进一页的那档
+
+
+def test_layout_floor_overflow_asks_for_one_trim(cfg, monkeypatch):
+    """压到最紧仍超页 → 带页数回去让定制官砍一次（只一次）；砍完还超就如实记页数，不报错。"""
+    n = len(ra.DENSITY_CSS)
+    _fake_pdf(monkeypatch, [(2, 60)] * n + [(1, 0)])
+    llm = L()
+    out = ra.customise(cfg, llm, "Acme", jd="need agents")
+    assert len(llm.prompts) == 2 and "最紧凑的版式下仍然排到了 2 页" in llm.prompts[1]
+    assert out["version"]["pages"] == 1
+
+    _fake_pdf(monkeypatch, [(2, 60)])
+    llm = L()
+    out = ra.customise(cfg, llm, "Acme", jd="need agents")
+    assert len(llm.prompts) == 2 and out["version"]["pages"] == 2
+
+
+def test_paper_setting():
+    assert ra._paper(Config(raw={}, path=None)) == "A4"
+    assert ra._paper(Config(raw={"resume": {"paper": "letter"}}, path=None)) == "letter"
+    assert ra._paper(Config(raw={"resume": {"paper": "Tabloid"}}, path=None)) == "A4"

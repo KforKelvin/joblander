@@ -151,7 +151,7 @@
   <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><b>{{ _('定制简历') }}</b><span class="pill teal" title="{{ _('弹药库 × 该司 JD → 定制 HTML/PDF，产出过红线守卫；评审=招聘方盲评+教练分拣') }}">ResumeCustomiserAgent</span>
     <span class="note" style="margin:0">{{ _('聊归聊、版归版：补料/提意见先跟教练聊（意见累积，下次整份重新生成），说「出一版」或点 ⚙ 才生成 · 事实定点入弹药库 · 版本只增不覆盖') }}</span>
     {% if rstate.versions %}{% set cur = rstate.versions[-1] %}<span class="sp2"></span>
-    <span class="note" style="margin:0">{{ _('当前') }} <b>v{{ cur.v }}</b>/{{ rstate.versions|length }} {{ _('版') }}{% if cur.pdf %} · <a href="/files/{{ rbase }}/{{ cur.file }}.pdf" target="_blank">📄 PDF</a>{% endif %} · <a href="/files/{{ rbase }}/{{ cur.file }}.html" target="_blank">HTML</a></span>{% endif %}
+    <span class="note" style="margin:0">{{ _('当前') }} <b>v{{ cur.v }}</b>/{{ rstate.versions|length }} {{ _('版') }}{% if cur.pdf %} · <a href="/files/{{ rbase }}/{{ cur.file }}.pdf" target="_blank">📄 PDF</a>{% if (cur.pages or 0) > 1 %} <span style="color:var(--red)">{{ _('（{n} 页——压到最紧、AI 也砍过一轮仍超，给教练说砍哪段）', n=cur.pages) }}</span>{% endif %}{% endif %} · <a href="/files/{{ rbase }}/{{ cur.file }}.html" target="_blank">HTML</a></span>{% endif %}
     {% if rstate.versions or rthread_new or rthread_old %}<button class="btn danger" style="flex-shrink:0;margin-left:auto" onclick="resetResume(this)" title="{{ _('清空对话与版本从头开始：旧版本与对话归档到 resume/archive-*（不物理删除）；「投出的版本」记录保留') }}">{{ _('🗑 清空重来') }}</button>{% endif %}
   </div>
   {% macro rturn(t) %}

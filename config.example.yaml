@@ -107,6 +107,9 @@ profile:                          # （可选）补充的本人材料，workspac
   files: []                       # 侦察打分与参谋部画像会读它们补充上下文
                                   # 例：[03-materials/narrative.md]
 
+resume:                           # （可选）定制简历 PDF
+  paper: A4                       # A4（默认）或 Letter（美国投递）；简历严格一页，超页自动收紧版式
+
 # ---------- workspace 里需要你自己准备的文件 ----------
 #
 # 必需（缺了对应功能会明确报错）：
