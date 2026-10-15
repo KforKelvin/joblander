@@ -106,7 +106,8 @@ def md_to_html(text: str) -> str:
 TASKS: dict[str, dict] = {}     # 内存注册表：产物全部落盘，状态可丢（重启即清）
 
 
-def start_task(kind: str, label: str, fn) -> str:
+def start_task(kind: str, label: str, fn, stoppable: bool = False) -> str:
+    """stoppable：任务在安全点查 joblander.cancel，托盘给「停止」按钮（/api/tasks/stop）。"""
     import os
     import threading
     import time
@@ -115,12 +116,15 @@ def start_task(kind: str, label: str, fn) -> str:
     tid = uuid.uuid4().hex[:8]
     label = _(label)                       # 请求上下文里定语言：托盘与提示都显示这一份
     TASKS[tid] = {"id": tid, "kind": kind, "label": label, "status": "running",
-                  "started": time.time(), "result": None, "error": ""}
+                  "started": time.time(), "result": None, "error": "",
+                  "stop": threading.Event() if stoppable else None}
 
     def run():
+        from joblander import cancel
+        cancel.bind(TASKS[tid]["stop"])
         try:
             TASKS[tid]["result"] = fn()
-            TASKS[tid]["status"] = "done"
+            TASKS[tid]["status"] = "stopped" if cancel.requested() else "done"
         except Exception as e:
             TASKS[tid]["error"] = str(e)
             TASKS[tid]["status"] = "error"
@@ -133,6 +137,8 @@ def start_task(kind: str, label: str, fn) -> str:
                                            "error": str(e)[:300]})
             except Exception:
                 pass
+        finally:
+            cancel.bind(None)
         TASKS[tid]["ended"] = time.time()
 
     if os.environ.get("JOBLANDER_TASKS_SYNC"):    # 测试/脚本：内联执行同一条链路
@@ -175,8 +181,10 @@ def recent_tasks() -> list[dict]:
     for t in TASKS.values():
         if t["status"] == "running" or now - t.get("ended", now) < 120:
             # 任务线程里拿不到请求语言：报错在返回给浏览器时再按当前界面语言翻
+            stop = t.get("stop")
             out.append({k: t[k] for k in ("id", "kind", "label", "status")}
-                       | {"error": _(t["error"]) if t["error"] else "", "secs": int(now - t["started"])})
+                       | {"error": _(t["error"]) if t["error"] else "", "secs": int(now - t["started"]),
+                          "stoppable": stop is not None, "stopping": bool(stop and stop.is_set())})
     return sorted(out, key=lambda t: -t["secs"])
 
 
@@ -467,7 +475,8 @@ def create_app(with_daemon: bool = True) -> FastAPI:
             if out.get("prefs_guessed"):          # 偏好是刚猜的：替他跑首轮，进门池子就不空
                 from joblander.sourcing import source_all
                 start_task("sourcing", "首次搜新机会",
-                           lambda: source_all(cfg, _llm("flash"), days=7, first_run=True))
+                           lambda: source_all(cfg, _llm("flash"), days=7, first_run=True),
+                           stoppable=True)
             return out
         tid = start_task("setup", "从简历生成弹药库", run)
         return {"ok": True, "task": tid, "label": TASKS[tid]["label"]}
@@ -1122,7 +1131,7 @@ def create_app(with_daemon: bool = True) -> FastAPI:
         if not prefs.get("keywords") and not prefs.get("targets"):
             return JSONResponse({"error": _t("先在下方「搜索偏好」填目标岗位关键词或目标公司")}, status_code=400)
         tid = start_task("sourcing", "搜新机会",
-                         lambda: source_all(cfg, _llm("flash"), days=days))
+                         lambda: source_all(cfg, _llm("flash"), days=days), stoppable=True)
         return {"ok": True, "task": tid, "label": TASKS[tid]["label"]}
 
     @app.post("/api/mcf/scan")
@@ -1132,7 +1141,8 @@ def create_app(with_daemon: bool = True) -> FastAPI:
             return JSONResponse({"error": _t("MyCareersFuture 已在设置里关闭")}, status_code=400)
         from joblander.sourcing import source_mcf
         tid = start_task("mcf", "扫 MyCareersFuture",
-                         lambda: {"proposals": len(source_mcf(cfg, _llm("flash"), days=days))})
+                         lambda: {"proposals": len(source_mcf(cfg, _llm("flash"), days=days))},
+                         stoppable=True)
         return {"ok": True, "task": tid, "label": TASKS[tid]["label"]}
 
     @app.post("/api/scan")
@@ -1349,6 +1359,15 @@ def create_app(with_daemon: bool = True) -> FastAPI:
     @app.get("/api/tasks")
     def api_tasks():
         return recent_tasks()
+
+    @app.post("/api/tasks/stop")
+    def api_tasks_stop(id: str = Form(...)):
+        """托盘「停止」：只置位，任务在下一个安全点自己收尾（已提的线索照留）。"""
+        t = TASKS.get(id)
+        if not t or t["status"] != "running" or t.get("stop") is None:
+            return JSONResponse({"error": _t("这个任务不能停止或已结束")}, status_code=400)
+        t["stop"].set()
+        return {"ok": True}
 
     @app.post("/api/tasks/dismiss")
     def api_tasks_dismiss(id: str = Form(...)):

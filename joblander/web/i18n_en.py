@@ -2,6 +2,10 @@
 
 EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture（新加坡）': 'MyCareersFuture (Singapore)',
+ '停止': 'Stop',
+ '停止中…': 'Stopping…',
+ ' 已停止': ' stopped',
+ '这个任务不能停止或已结束': 'This task can’t be stopped or has already finished',
  '地点（逗号分隔；写「Remote United States」= 该地区的远程岗位）':
      'Locations (comma-separated; “Remote United States” = remote roles in that region)',
  '按求职偏好每晚搜 MyCareersFuture 新岗位，并用它的挂牌薪资做薪酬调研、尽调证据和市场参考。关着时不向 MCF 发任何请求。':

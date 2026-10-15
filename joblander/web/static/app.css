@@ -461,6 +461,8 @@ dialog h3{margin:0 0 10px;font-size:16px;font-weight:650;letter-spacing:-.01em}
 @media(prefers-reduced-motion:reduce){#tasktray .spin,#tasktray .task.run .bar{animation:none}}
 #tasktray .tx{margin-left:6px;color:var(--ink-3);font-size:12px;flex-shrink:0}
 #tasktray .tx:hover{color:var(--ink)}
+#tasktray .tstop{margin-left:6px;color:var(--ink-3);font-size:12px;flex-shrink:0;text-decoration:none;position:relative;z-index:1}
+#tasktray a.tstop:hover{color:var(--red)}
 #tasktray .task.fade{animation:taskin .25s ease,taskfade .6s ease 7.4s forwards}
 @keyframes taskfade{to{opacity:0;transform:translateY(6px)}}
 

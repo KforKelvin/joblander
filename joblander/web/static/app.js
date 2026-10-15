@@ -104,6 +104,11 @@ function _dismissServer(id){
   const fd = new FormData(); fd.append('id', id);
   fetch('/api/tasks/dismiss', {method:'POST', body:fd});   // 服务端销单：切页不还魂
 }
+function stopTask(id, el){
+  const fd = new FormData(); fd.append('id', id);
+  if (el) el.outerHTML = `<span class="tstop">${T('停止中…')}</span>`;   // 等它走到下一个安全点
+  fetch('/api/tasks/stop', {method:'POST', body:fd}).then(()=>pollTasks());
+}
 function dismissTask(id){
   _dismissed.add(id);                          // 本地即时消失
   _dismissServer(id);
@@ -117,7 +122,7 @@ async function pollTasks(){
     if (_dismissed.has(t.id)) return false;
     if (t.status === 'running') return true;
     if (!_doneSeen.has(t.id)) _doneSeen.set(t.id, now);
-    if (t.status === 'done' && now - _doneSeen.get(t.id) > DONE_TTL){
+    if ((t.status === 'done' || t.status === 'stopped') && now - _doneSeen.get(t.id) > DONE_TTL){
       _dismissed.add(t.id);            // 成功卡到点自动销单（服务端同删）；失败卡留驻手动关
       _dismissServer(t.id);
       return false;
@@ -129,8 +134,10 @@ async function pollTasks(){
     const run = vis.filter(t=>t.status==='running');
     const done = vis.filter(t=>t.status!=='running').slice(0,3);
     el.innerHTML =
-      run.map(t=>`<div class="task run"><span class="spin"></span><span class="tl">${t.label}</span><span class="ts">${_fmtSecs(t.secs)}</span><i class="bar"></i></div>`).join('') +
-      done.map(t=>`<div class="task ${t.status==='done'?'fade':''}"><span class="${t.status==='done'?'okk':'errk'}">${t.status==='done'?'✓':'✗'}</span><span class="tl" ${t.error?`title="${t.error.replace(/"/g,'&quot;')}"`:''}>${t.label}${t.error?'：'+t.error.slice(0,60):''}</span><a class="tx" href="#" onclick="dismissTask('${t.id}');return false" title="关闭">✕</a></div>`).join('');
+      run.map(t=>`<div class="task run"><span class="spin"></span><span class="tl">${t.label}</span><span class="ts">${_fmtSecs(t.secs)}</span>${
+        t.stopping ? `<span class="tstop">${T('停止中…')}</span>`
+        : t.stoppable ? `<a class="tstop" href="#" onclick="stopTask('${t.id}',this);return false">■ ${T('停止')}</a>` : ''}<i class="bar"></i></div>`).join('') +
+      done.map(t=>`<div class="task ${t.status==='error'?'':'fade'}"><span class="${t.status==='error'?'errk':'okk'}">${t.status==='done'?'✓':t.status==='stopped'?'■':'✗'}</span><span class="tl" ${t.error?`title="${t.error.replace(/"/g,'&quot;')}"`:''}>${t.label}${t.error?'：'+t.error.slice(0,60):''}</span><a class="tx" href="#" onclick="dismissTask('${t.id}');return false" title="关闭">✕</a></div>`).join('');
   }
   let hasRunning = false;
   ts.forEach(t=>{
@@ -138,12 +145,13 @@ async function pollTasks(){
     else if (_seenRunning.has(t.id)){
       _seenRunning.delete(t.id);
       if (t.status === 'done'){ toast('✓ ' + t.label + T(' 完成')); setTimeout(()=>location.reload(), 700); }
+      else if (t.status === 'stopped'){ toast('■ ' + t.label + T(' 已停止')); setTimeout(()=>location.reload(), 700); }
       else toast('✗ ' + t.label + T(' 失败：') + (t.error || '').slice(0, 120));
     }
   });
   clearTimeout(_trayTimer);
   if (hasRunning) _trayTimer = setTimeout(pollTasks, 2000);
-  else if (vis.some(t=>t.status==='done')) _trayTimer = setTimeout(pollTasks, DONE_TTL + 500);
+  else if (vis.some(t=>t.status==='done' || t.status==='stopped')) _trayTimer = setTimeout(pollTasks, DONE_TTL + 500);
 }
 addEventListener('DOMContentLoaded', pollTasks);   // 切页回来自动恢复进行中状态
 addEventListener('pageshow', e => {                // 后退命中 bfcache = 冻结的旧页面——强制取新

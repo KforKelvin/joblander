@@ -125,6 +125,34 @@ def test_target_location_filter_understands_remote():
     assert not in_locations({"location": "Chicago, IL"}, locs)
 
 
+def test_stop_mid_search_keeps_bookkeeping(tmp_path, monkeypatch):
+    """网页「停止」：停在两条岗位之间；已提的照留、见过的照记（下轮不重复提），后面的搜索不再发。"""
+    import threading
+    from joblander import cancel
+    cfg = _cfg(tmp_path)
+    S.save_prefs(cfg, {"keywords": ["a", "b"], "locations": ["Houston", "Austin"]})
+    stop = threading.Event()
+    calls = []
+    cards = [{"id": "1", "title": "Data Engineer", "company": "One", "location": "Houston",
+              "posted": "2099-01-01", "url": "u1"},
+             {"id": "2", "title": "Data Engineer", "company": "Two", "location": "Houston",
+              "posted": "2099-01-01", "url": "u2"}]
+    monkeypatch.setattr(S, "linkedin_search", lambda kw, loc, hours=48, start=0, remote=False:
+                        calls.append((kw, loc)) or cards)
+    monkeypatch.setattr(S, "_li_get", lambda url, timeout=20: DETAIL)
+    monkeypatch.setattr("time.sleep", lambda s: None)
+    monkeypatch.setattr(S, "assess_fit", lambda cfg, llm, lead, jd_text="": stop.set() or {"fit": 4})
+    cancel.bind(stop)
+    try:
+        outs = S.source_linkedin(cfg, MockLLM([]))
+        assert S.source_all(cfg, MockLLM([])) == {}                  # 停了：一个渠道都不再开跑
+    finally:
+        cancel.bind(None)
+    assert len(outs) == 1 and calls == [("a", "Houston")]
+    seen = json.loads((cfg.workspace_dir / "19-sourcing" / "linkedin-seen.json").read_text())
+    assert "1" in seen and "2" not in seen                          # 没看的留给下一轮
+
+
 def test_linkedin_off_or_blocked_never_raises(tmp_path, monkeypatch):
     assert S.source_linkedin(_cfg(tmp_path / "a", linkedin=False), MockLLM([])) == []
     cfg = _cfg(tmp_path / "b")

@@ -20,6 +20,7 @@ from typing import Any
 
 import yaml
 
+from joblander import cancel
 from joblander.tz import LOCAL_TZ as SGT   # 单一来源，JOBLANDER_TZ 可覆盖
 PREFS_REL = "02-targets/sourcing-prefs.yaml"
 MCF_API = "https://api.mycareersfuture.gov.sg/v2/search"
@@ -325,6 +326,8 @@ def source_mcf(cfg, llm, days: int = 2, limit_per_kw: int = 20,
         run.log.append("sourcing.mcf_skipped", "joblander.sourcing", {"reason": "no_keywords"})
         return []
     for kw in keywords:
+        if cancel.requested():
+            break
         try:
             jobs = mcf_search(kw, limit=limit_per_kw)
         except Exception as e:
@@ -332,6 +335,8 @@ def source_mcf(cfg, llm, days: int = 2, limit_per_kw: int = 20,
             continue
         run.fetched += len(jobs)
         for job in jobs:
+            if cancel.requested():               # 停在两条之间：已提的照留、照常记账
+                break
             uuid = job.get("uuid") or ""
             posted = (job.get("metadata") or {}).get("newPostingDate") or ""
             lead = mcf_to_lead(job, lang=run.lang)
@@ -454,6 +459,8 @@ def source_linkedin(cfg, llm, days: int = 2, pages_per_kw: int = 1,
     places = [parse_location(l) for l in (run.prefs.get("locations") or ["Singapore"])
               if l.strip()][:MAX_LOCATIONS] or [("Singapore", False)]
     for kw, (loc, remote) in ((k, p) for k in keywords for p in places):
+        if cancel.requested():
+            break
         for page in range(pages_per_kw):
             try:
                 cards = linkedin_search(kw, loc, hours=days * 24, start=page * 10, remote=remote)
@@ -463,6 +470,8 @@ def source_linkedin(cfg, llm, days: int = 2, pages_per_kw: int = 1,
                 break
             run.fetched += len(cards)
             for card in cards:
+                if cancel.requested():
+                    break
                 if not run.admit(card["id"], card["posted"], card["company"], card["title"]):
                     continue
                 lead = linkedin_to_lead(card, lang=run.lang)
@@ -494,6 +503,8 @@ def source_all(cfg, llm, days: int = 2, *, first_run: bool = False) -> dict[str,
         chans.append(("targets", source_targets))
         kw["targets"] = {}
     for name, fn in chans:
+        if cancel.requested():                    # 网页点了「停止」：后面的渠道不再开跑
+            break
         try:
             out[name] = len(fn(cfg, llm, days=days, **kw[name]))
         except Exception as e:                       # noqa: BLE001

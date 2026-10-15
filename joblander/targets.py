@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
+from joblander import cancel
 from joblander.sourcing import (SGT, _Run, _profile_digest, _strip_html, _txt,
                                 load_prefs, prefs_text)
 
@@ -306,6 +307,8 @@ def source_targets(cfg, llm, days: int = 2, max_picks: int = MAX_PICKS,
     cache = _load_json(_boards_path(cfg))
     status = load_status(cfg)
     for entry in targets:
+        if cancel.requested():                     # 网页点了「停止」：剩下的公司留给下一轮
+            break
         st: dict[str, Any] = {"ts": datetime.now(SGT).isoformat(timespec="seconds")}
         try:
             board, jobs = resolve(cfg, entry, cache)

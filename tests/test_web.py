@@ -1153,3 +1153,29 @@ def test_export_all_data_zip(client):
     assert "Acme AI" in z.read("workspace/09-projections/tracker.json").decode()
     conf = z.read("config.yaml").decode()
     assert "fake" not in conf and "<redacted>" in conf          # notion token 抹掉
+
+
+def test_stop_button_for_stoppable_tasks(client, monkeypatch):
+    """托盘「停止」：只有可停的任务有；置位后显示停止中；任务收尾后状态是 stopped 而非 done。"""
+    import threading
+    import time
+    from joblander import cancel
+    from joblander.web import app as A
+    A.TASKS["t1"] = {"id": "t1", "kind": "sourcing", "label": "x", "status": "running",
+                     "started": time.time(), "result": None, "error": "", "stop": threading.Event()}
+    A.TASKS["t2"] = {"id": "t2", "kind": "brief", "label": "y", "status": "running",
+                     "started": time.time(), "result": None, "error": "", "stop": None}
+    try:
+        ts = {t["id"]: t for t in client.get("/api/tasks").json()}
+        assert ts["t1"]["stoppable"] and not ts["t1"]["stopping"] and not ts["t2"]["stoppable"]
+        assert client.post("/api/tasks/stop", data={"id": "t2"}).status_code == 400
+        assert client.post("/api/tasks/stop", data={"id": "t1"}).status_code == 200
+        assert {t["id"]: t for t in client.get("/api/tasks").json()}["t1"]["stopping"]
+    finally:
+        A.TASKS.pop("t1", None)
+        A.TASKS.pop("t2", None)
+    monkeypatch.setenv("JOBLANDER_TASKS_SYNC", "1")
+    tid = A.start_task("sourcing", "搜新机会", lambda: cancel._local.event.set(), stoppable=True)
+    assert A.TASKS[tid]["status"] == "stopped" and not cancel.requested()
+    tid = A.start_task("sourcing", "搜新机会", lambda: None, stoppable=True)
+    assert A.TASKS[tid]["status"] == "done"
