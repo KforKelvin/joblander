@@ -1,6 +1,5 @@
 intent: Seek a data engineering or analytics role focused on data automation, cloud-hosted
-  pipelines, SQL reporting, and business intelligence, or Project management in digital
-  tech, and digital transformation.
+  pipelines, SQL reporting, and business intelligence, or Project management
 keywords:
 - Data Engineer
 - Analytics Engineer
@@ -17,8 +16,9 @@ locations:
 - United States
 exclude:
 - Contract
+- W2
 guessed: false
-updated: '2026-10-15T08:24:12+08:00'
+updated: '2026-10-15T16:43:16-05:00'
 notes: Remote jobs in other states of United States
 linkedin_profile: https://www.linkedin.com/in/kaiyuan-gao-30413a187
 targets: []
