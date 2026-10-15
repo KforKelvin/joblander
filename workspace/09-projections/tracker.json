@@ -47,7 +47,31 @@
    "Source": "linkedin",
    "created": "2026-10-15T08:05:01+08:00",
    "Job URL": "https://www.linkedin.com/jobs/view/data-analyst-at-goodwill-houston-4476608006"
+  },
+  {
+   "notion_page_id": "local-babdca6e36d8",
+   "Company": "ExxonMobil",
+   "Position": "2026USH - Trading Desk Full Stack Developer",
+   "Status": "Added",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-14; Not Applicable",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T08:30:45+08:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/2026ush-trading-desk-full-stack-developer-at-exxonmobil-4461218981"
+  },
+  {
+   "notion_page_id": "local-09cd3ebb2946",
+   "Company": "Jackson Walker LLP",
+   "Position": "Data Engineer",
+   "Status": "Added",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-14; Not Applicable",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-15T08:33:33+08:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/data-engineer-at-jackson-walker-llp-4479571738"
   }
  ],
- "pulled_rows": 8
+ "pulled_rows": 6
 }
