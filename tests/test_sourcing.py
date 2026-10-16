@@ -152,3 +152,22 @@ def test_dedupe_normalizes_legal_entity_names():
     assert dedupe(rows, "GOOGLE ASIA PACIFIC PTE. LTD.", [])["verdict"] == "duplicate"
     assert dedupe(rows, "THE ACME AI INTERNATIONAL (SINGAPORE) PTE. LTD.", [])["verdict"] == "duplicate"
     assert dedupe(rows, "Googolplex Robotics", [])["verdict"] == "new"   # 不误伤相似词
+
+
+def test_nightly_switch_off_means_manual_only(cfg, monkeypatch):
+    """设置里关「每晚自动搜」：夜扫到点也不搜（也不占当天的 done 戳，开回来当晚照常跑）。"""
+    from datetime import datetime
+    from joblander.daemon import Daemon
+
+    calls = []
+    monkeypatch.setattr("joblander.sourcing.source_all", lambda *a, **k: calls.append(1) or {})
+    monkeypatch.setattr("joblander.daemon.datetime",
+                        type("D", (), {"now": staticmethod(lambda tz=None: datetime(2099, 1, 1, 3, 0, tzinfo=tz))}))
+    d = Daemon(cfg)
+    monkeypatch.setattr(d, "_llm", lambda tier="flash": None)
+    cfg.raw["features"] = {"nightly": False}
+    d.job_nightly_sourcing()
+    assert calls == [] and "done.sourcing" not in d.state
+    cfg.raw["features"] = {"nightly": True}
+    d.job_nightly_sourcing()
+    assert calls == [1]

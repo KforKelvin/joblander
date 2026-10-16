@@ -3,6 +3,13 @@
 EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture（新加坡）': 'MyCareersFuture (Singapore)',
  '停止': 'Stop',
+ '每晚自动搜新机会': 'Nightly automatic search',
+ '每晚 02:30 按搜索偏好自动搜一轮、打分后放进「新机会」。关掉后只在你点「立即搜」时搜。':
+     'Every night at 02:30, search by your preferences, score the results and put them in New Leads. When off, searches run only when you click “Search now”.',
+ '点「立即搜」按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。（每晚自动搜已在设置里关）':
+     'Click “Search now” to search {src} for new roles matching your preferences → de-duplicate → score fit against your Arsenal and screen hard requirements → they wait here for your decision. (Nightly automatic search is off in Settings.)',
+ '点「立即搜」时按偏好关键词搜': 'Searches your keywords when you click “Search now”',
+ '点「立即搜」时按关键词 × 地点搜近 48h 公开职位': 'When you click “Search now”, searches public roles from the last 48h by keyword × location',
  '（{n} 页——压到最紧、AI 也砍过一轮仍超，给教练说砍哪段）':
      '({n} pages — still over after the tightest layout and one AI trim; tell the coach what to cut)',
  '停止中…': 'Stopping…',

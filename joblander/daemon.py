@@ -259,8 +259,10 @@ class Daemon:
 
     def job_nightly_sourcing(self):
         """夜扫（W1 主动侦察）：他睡觉时按偏好抓 MCF 新岗 → fit 评分 → 待入池；晨起决策。
-        Gmail 侧的 job alert 邮件由 30min 循环持续覆盖，夜扫不重复拉。"""
-        if not self._due_daily("sourcing", 2, 30):
+        Gmail 侧的 job alert 邮件由 30min 循环持续覆盖，夜扫不重复拉。
+        设置里关了「每晚自动搜」就只剩手动「立即搜」（与网页共用 cfg，开关即时生效）。"""
+        from joblander.wizard import features
+        if not features(self.cfg)["nightly"] or not self._due_daily("sourcing", 2, 30):
             return
         from joblander.notify import notify
         from joblander.sourcing import source_all

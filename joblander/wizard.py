@@ -238,7 +238,8 @@ def save_basics(cfg, target_tc: float, currency: str, redlines: list[str]) -> No
 # LinkedIn 抓取走免登录的公开职位接口（条款灰区），默认开、可关。
 # MyCareersFuture（新加坡）默认关：关着时不发任何 MCF 请求——搜岗、目标公司退路、
 # 薪酬调研、尽调薪资证据、贴入 MCF 链接都跳过。
-FEATURES = {"drill": False, "linkedin": True, "mcf": False}
+# 每晚 02:30 自动搜新机会默认开；关掉 = 只在「新机会」页点「立即搜」时搜。
+FEATURES = {"drill": False, "linkedin": True, "mcf": False, "nightly": True}
 
 
 def features(cfg) -> dict[str, bool]:

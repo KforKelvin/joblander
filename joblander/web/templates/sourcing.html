@@ -42,7 +42,8 @@
   <button class="btn pri" onclick="dlg('dlg-intake')">{{ _('＋ 贴入') }}</button>
 </div>
 <h1>{{ _('新机会') }}</h1>
-<div class="sub">{{ _('每晚 02:30 按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。', src=(('MyCareersFuture' ~ (_(' 和 LinkedIn') if features.linkedin else '')) if features.mcf else ('LinkedIn' if features.linkedin else _('目标公司的招聘页'))) ~ (_('，以及目标公司的招聘页') if prefs.get('targets') and (features.mcf or features.linkedin) else '')) }}</div>
+{% set src = (('MyCareersFuture' ~ (_(' 和 LinkedIn') if features.linkedin else '')) if features.mcf else ('LinkedIn' if features.linkedin else _('目标公司的招聘页'))) ~ (_('，以及目标公司的招聘页') if prefs.get('targets') and (features.mcf or features.linkedin) else '') %}
+<div class="sub">{% if features.nightly %}{{ _('每晚 02:30 按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。', src=src) }}{% else %}{{ _('点「立即搜」按你的偏好搜 {src} 的新岗位 → 去重 → 对照弹药库打匹配分、初筛硬性要求 → 在这里等你决定入不入池。（每晚自动搜已在设置里关）', src=src) }}{% endif %}</div>
 
 {% if prefs.get('guessed') %}
 <div class="card tint-amber" style="margin-bottom:16px">
@@ -138,11 +139,11 @@
     <h2 style="margin-top:0">{{ _('渠道') }}</h2>
     {% if features.mcf %}
     <div class="row"><span class="when">{{ _('自动') }}</span><div class="body"><b>MyCareersFuture</b>
-      <div class="meta">{{ _('每晚 02:30 按偏好关键词抓新岗') }}{% if mcf_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=mcf_last.payload.fetched, b=mcf_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>
+      <div class="meta">{{ _('每晚 02:30 按偏好关键词抓新岗') if features.nightly else _('点「立即搜」时按偏好关键词搜') }}{% if mcf_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=mcf_last.payload.fetched, b=mcf_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>
     {% endif %}
     {% if features.linkedin %}
     <div class="row"><span class="when">{{ _('自动') }}</span><div class="body"><b>LinkedIn</b>
-      <div class="meta">{{ _('每晚按关键词 × 首选地点搜近 48h 公开职位') }}{% if li_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=li_last.payload.fetched, b=li_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>
+      <div class="meta">{{ _('每晚按关键词 × 首选地点搜近 48h 公开职位') if features.nightly else _('点「立即搜」时按关键词 × 地点搜近 48h 公开职位') }}{% if li_last %} ｜ {{ _('上次抓 {a} 提 {b}', a=li_last.payload.fetched, b=li_last.payload.proposed) }}{% endif %} ｜ <a href="/settings#features">{{ _('可在设置里关') }}</a></div></div></div>
     {% else %}
     <div class="row"><span class="when">{{ _('半自动') }}</span><div class="body"><b>LinkedIn</b>
       <div class="meta">{{ _('自动搜索已关（可在设置里开）。深链按你的关键词拼好近 24h 搜索——看到好的用「＋ 贴入」丢回来：') }}</div>
