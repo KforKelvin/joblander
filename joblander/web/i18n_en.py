@@ -3,6 +3,8 @@
 EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture（新加坡）': 'MyCareersFuture (Singapore)',
  '停止': 'Stop',
+ '远程': 'Remote',
+ '打开岗位原文': 'Open the original job posting',
  '每晚自动搜新机会': 'Nightly automatic search',
  '每晚 02:30 按搜索偏好自动搜一轮、打分后放进「新机会」。关掉后只在你点「立即搜」时搜。':
      'Every night at 02:30, search by your preferences, score the results and put them in New Leads. When off, searches run only when you click “Search now”.',

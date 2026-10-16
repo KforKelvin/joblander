@@ -474,14 +474,15 @@ def source_linkedin(cfg, llm, days: int = 2, pages_per_kw: int = 1,
                     break
                 if not run.admit(card["id"], card["posted"], card["company"], card["title"]):
                     continue
-                lead = linkedin_to_lead(card, lang=run.lang)
+                lead = linkedin_to_lead(card, lang=run.lang) | ({"remote": True} if remote else {})
                 verdict = run.tracked(lead)
                 if verdict is None:
                     continue
                 try:
                     time.sleep(1)                  # 礼貌间隔：一人一晚几十个请求，不扎堆
                     lead = linkedin_to_lead(card, parse_linkedin_detail(
-                        _li_get(LI_DETAIL.format(id=card["id"]))), lang=run.lang)
+                        _li_get(LI_DETAIL.format(id=card["id"]))), lang=run.lang) | (
+                        {"remote": True} if remote else {})
                 except Exception:
                     pass
                 run.propose(lead, verdict, kw, card["id"])

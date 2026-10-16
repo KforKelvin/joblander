@@ -12,9 +12,11 @@
   <div class="body">
     <b style="font-weight:600">{{ p.lead.position or '—' }}</b>
     {% if p.lead.target %}<span class="pill teal">{{ _('目标公司') }}</span>{% else %}<span class="pill gray">{{ p.source_hint }}</span>{% endif %}
-    <span class="note" style="margin:0" title="{{ _('进入待入池的时间') }}">{{ _('入库') }} {{ p._created or '—' }}</span>
+    {% set loc = (p.lead.location or '')|trim %}
+    {% if p.lead.remote or loc %}<span class="pill blue" title="{{ loc }}">{{ icon("pin", 11) }}{{ _('远程') if p.lead.remote or 'remote' in loc|lower else loc.split(',')[0] }}</span>{% endif %}
     {% if p.dedupe.verdict == 'group_conflict' %}<span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}
-    {% if p.lead.urls %}<a class="note" href="{{ p.lead.urls[0] }}" target="_blank">JD ↗</a>{% endif %}
+    {% if p.lead.urls %}<a class="btn xs" href="{{ p.lead.urls[0] }}" target="_blank" rel="noopener" title="{{ _('打开岗位原文') }}">JD {{ icon("external", 11) }}</a>{% endif %}
+    <span class="note" style="margin:0" title="{{ _('进入待入池的时间') }}">{{ _('入库') }} {{ p._created or '—' }}</span>
     {% if (p.fit or {}).get('why') %}<div class="meta">{{ p.fit.why }}</div>{% endif %}
     {% for g in (p.fit or {}).get('req_gaps') or [] %}
     <div class="meta" style="color:{{ 'var(--red)' if g.verdict=='不符' else 'var(--amber)' }}">{{ '⛔' if g.verdict=='不符' else '❓' }} {{ g.req }} — {{ g.note }}</div>
