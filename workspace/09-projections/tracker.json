@@ -100,7 +100,7 @@
    "notion_page_id": "local-93b2a400b4a3",
    "Company": "SLB",
    "Position": "Ethics & Compliance Data Analyst",
-   "Status": "Added",
+   "Status": "Applied",
    "Priority": "Low",
    "Highlight": "LinkedIn listing 2026-10-15; Not Applicable",
    "Next Steps": "Read the JD; apply if it fits",
@@ -112,7 +112,7 @@
    "notion_page_id": "local-d1645848edc3",
    "Company": "Devon Energy",
    "Position": "Data Analysis Professional - Supply Chain",
-   "Status": "Added",
+   "Status": "Rejected",
    "Priority": "Low",
    "Highlight": "LinkedIn listing 2026-10-15; Not Applicable",
    "Next Steps": "Read the JD; apply if it fits",
@@ -124,7 +124,7 @@
    "notion_page_id": "local-fc636dc527e8",
    "Company": "MetroNational",
    "Position": "Data Engineer",
-   "Status": "Added",
+   "Status": "Applied",
    "Priority": "Low",
    "Highlight": "LinkedIn listing 2026-10-15; Not Applicable",
    "Next Steps": "Read the JD; apply if it fits",
@@ -136,7 +136,7 @@
    "notion_page_id": "local-6c1abebba318",
    "Company": "Aarista Technologies",
    "Position": "Data Analyst",
-   "Status": "Added",
+   "Status": "Applied",
    "Priority": "Low",
    "Highlight": "LinkedIn listing 2026-10-15; Associate",
    "Next Steps": "Read the JD; apply if it fits",
@@ -433,18 +433,6 @@
    "Job URL": "https://www.linkedin.com/jobs/view/business-intelligence-health-data-analyst-133-2008-at-communitycare-hmo-inc-4471419322"
   },
   {
-   "notion_page_id": "local-c6a048f2827a",
-   "Company": "University of Michigan",
-   "Position": "Health Data Analyst",
-   "Status": "Added",
-   "Priority": "Low",
-   "Highlight": "LinkedIn listing 2026-10-14; Not Applicable",
-   "Next Steps": "Read the JD; apply if it fits",
-   "Source": "linkedin",
-   "created": "2026-10-15T17:29:23-05:00",
-   "Job URL": "https://www.linkedin.com/jobs/view/health-data-analyst-at-university-of-michigan-4479594500"
-  },
-  {
    "notion_page_id": "local-47ef0efdc783",
    "Company": "Aritzia",
    "Position": "Digital - Senior Data Analyst / Data Analyst",
@@ -587,6 +575,18 @@
    "Source": "linkedin",
    "created": "2026-10-15T17:37:00-05:00",
    "Job URL": "https://www.linkedin.com/jobs/view/business-intelligence-analyst-at-dallas-mavericks-4480146460"
+  },
+  {
+   "notion_page_id": "local-bddb9a9aa363",
+   "Company": "PepsiCo",
+   "Position": "LD&T Data Engineer",
+   "Status": "Added",
+   "Priority": "Low",
+   "Highlight": "LinkedIn listing 2026-10-15",
+   "Next Steps": "Read the JD; apply if it fits",
+   "Source": "linkedin",
+   "created": "2026-10-16T10:06:44-05:00",
+   "Job URL": "https://www.linkedin.com/jobs/view/ld-t-data-engineer-at-pepsico-4477330729"
   }
  ],
  "pulled_rows": 49
