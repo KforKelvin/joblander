@@ -72,27 +72,27 @@
   <button class="btn" onclick="post('/api/scan',{days:2},{btn:this})">{{ _('↻ 扫邮箱') }}</button>{% endif %}
   <span class="note" style="margin:0">{{ _('后台任务——点完随便去哪，右下角看进度，完成自动刷新') }}</span>
 </div>
-
-<h2>{{ _('待入池（{n} 岗 · 按公司聚合，已在库公司不出现在这里）', n=total) }}</h2>
-{% if good or low %}
-<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
-  <button class="btn" onclick="selBy('lowfit')">{{ _('选低匹配') }}</button>
-  <button class="btn" onclick="selBy('all')">{{ _('全选') }}</button>
-  <button class="btn" onclick="selBy('')">{{ _('清除') }}</button>
-  <span class="sp"></span>
-  <button class="btn danger" onclick="batchReject(this)" title="{{ _('所选全部否决——只记账，可反悔') }}"><span>{{ _('否决所选') }} (<span id="seln">0</span>)</span></button>
+<div class="card" style="margin-top:12px">
+  <h2 style="margin-top:0">{{ _('评分依据 · 弹药库') }}</h2>
+  <div class="note" style="margin:0 0 8px">{{ _('入池初筛（req_gaps 对照）、公司页「评估匹配」、能力画像读的都是弹药库——在那里改了战绩，下次评估自动生效，无需任何操作。') }}</div>
+  {% if bank.exists %}
+  <div class="row"><span class="when">{{ bank.mtime }}</span>
+    <div class="body"><a href="/arsenal">{{ _('▤ 战绩素材库（achievement-bank）') }}</a> <span class="note">{{ bank.kb }} KB · {{ _('唯一事实来源') }}</span></div></div>
+  {% else %}
+  <div class="sentinel warn">{{ _('⚠️ 弹药库为空——初筛无履历可对照，req_gaps 全部只能标存疑。去「弹药库」页写第一段战绩。') }}</div>
+  {% endif %}
+  {% for f in profile_files %}
+  <div class="row"><span class="when">{{ f.mtime or _('缺失') }}</span>
+    <div class="body">{% if f.exists %}<a href="/files/{{ f.rel }}" target="_blank">📄 {{ f.name }}</a> <span class="note">{{ f.kb }} KB · {{ _('补充材料') }}</span>
+      {% else %}<span style="color:var(--red)">⚠️ {{ _('{p} 不存在——检查 config profile.files', p=f.rel) }}</span>{% endif %}</div></div>
+  {% endfor %}
+  {% if bank.exists %}<div class="note">{{ _('评分器实际吃到 {n} 字符（上限 12,000，超出截断）。', n='{:,}'.format(digest_chars)) }}</div>{% endif %}
 </div>
-{% for g in good %}{{ groupcard(g) }}{% endfor %}
-{% if low %}
-<details {{ 'open' if not good }}><summary class="note" style="cursor:pointer">{{ _('低匹配 / 未评分（{n} 家）——大概率不值得看，展开确认后批量否决', n=low|length) }}</summary>
-<div style="margin-top:8px">{% for g in low %}{{ groupcard(g) }}{% endfor %}</div>
-</details>
-{% endif %}
-{% else %}
-<div class="card">{{ _('暂无待决策线索 ✅ 每晚自动搜，有新的会出现在这里。等不及就点上面的「立即搜」。') }}</div>
-{% endif %}
-
-<div class="grid2" style="margin-top:26px">
+{# 偏好还没填/是猜的：默认展开逼他看一眼；其余按他上次的开合（localStorage，见页尾脚本） #}
+<details id="prefs-fold" style="margin-top:26px" {{ 'open' if prefs.get('guessed') or not (prefs.get('keywords') or prefs.get('targets')) }}
+         data-force="{{ 1 if prefs.get('guessed') or not (prefs.get('keywords') or prefs.get('targets')) else 0 }}">
+<summary class="note" style="cursor:pointer">{{ _('搜索偏好与渠道（{k} 个关键词 · {l} 个地点）', k=(prefs.get('keywords') or [])|length, l=(prefs.get('locations') or [])|length) }}</summary>
+<div class="grid2" style="margin-top:8px">
   <div class="card">
     <h2 style="margin-top:0;display:flex;align-items:center">{{ _('搜索偏好（喂给评分器和搜索源）') }}<span class="sp"></span>
       <button class="btn" id="prefs-edit-btn" onclick="togPrefs(true)" style="text-transform:none;letter-spacing:0">{{ _('✎ 编辑') }}</button></h2>
@@ -163,23 +163,26 @@
       <div class="meta">{{ _('复制原文 →「＋ 贴入」→ 抽取 + 查重 + 评分自动完成') }}</div></div></div>
   </div>
 </div>
-
-<div class="card" style="margin-top:12px">
-  <h2 style="margin-top:0">{{ _('评分依据 · 弹药库') }}</h2>
-  <div class="note" style="margin:0 0 8px">{{ _('入池初筛（req_gaps 对照）、公司页「评估匹配」、能力画像读的都是弹药库——在那里改了战绩，下次评估自动生效，无需任何操作。') }}</div>
-  {% if bank.exists %}
-  <div class="row"><span class="when">{{ bank.mtime }}</span>
-    <div class="body"><a href="/arsenal">{{ _('▤ 战绩素材库（achievement-bank）') }}</a> <span class="note">{{ bank.kb }} KB · {{ _('唯一事实来源') }}</span></div></div>
-  {% else %}
-  <div class="sentinel warn">{{ _('⚠️ 弹药库为空——初筛无履历可对照，req_gaps 全部只能标存疑。去「弹药库」页写第一段战绩。') }}</div>
-  {% endif %}
-  {% for f in profile_files %}
-  <div class="row"><span class="when">{{ f.mtime or _('缺失') }}</span>
-    <div class="body">{% if f.exists %}<a href="/files/{{ f.rel }}" target="_blank">📄 {{ f.name }}</a> <span class="note">{{ f.kb }} KB · {{ _('补充材料') }}</span>
-      {% else %}<span style="color:var(--red)">⚠️ {{ _('{p} 不存在——检查 config profile.files', p=f.rel) }}</span>{% endif %}</div></div>
-  {% endfor %}
-  {% if bank.exists %}<div class="note">{{ _('评分器实际吃到 {n} 字符（上限 12,000，超出截断）。', n='{:,}'.format(digest_chars)) }}</div>{% endif %}
+</details>
+<h2>{{ _('待入池（{n} 岗 · 按公司聚合，已在库公司不出现在这里）', n=total) }}</h2>
+{% if good or low %}
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+  <button class="btn" onclick="selBy('lowfit')">{{ _('选低匹配') }}</button>
+  <button class="btn" onclick="selBy('all')">{{ _('全选') }}</button>
+  <button class="btn" onclick="selBy('')">{{ _('清除') }}</button>
+  <span class="sp"></span>
+  <button class="btn danger" onclick="batchReject(this)" title="{{ _('所选全部否决——只记账，可反悔') }}"><span>{{ _('否决所选') }} (<span id="seln">0</span>)</span></button>
 </div>
+{% for g in good %}{{ groupcard(g) }}{% endfor %}
+{% if low %}
+<details {{ 'open' if not good }}><summary class="note" style="cursor:pointer">{{ _('低匹配 / 未评分（{n} 家）——大概率不值得看，展开确认后批量否决', n=low|length) }}</summary>
+<div style="margin-top:8px">{% for g in low %}{{ groupcard(g) }}{% endfor %}</div>
+</details>
+{% endif %}
+{% else %}
+<div class="card">{{ _('暂无待决策线索 ✅ 每晚自动搜，有新的会出现在这里。等不及就点上面的「立即搜」。') }}</div>
+{% endif %}
+
 
 <script>
 function selBy(flag){
@@ -207,10 +210,19 @@ async function batchReject(btn){
   toast({{ _('已否决 {n} 条')|jsq }}.replace('{n}', done)); setTimeout(()=>location.reload(), 500);
 }
 function togPrefs(edit){
+  if (edit) document.getElementById('prefs-fold').open = true;   // 从别处点「编辑偏好」：先展开再滚过去
   document.getElementById('prefs-view').style.display = edit ? 'none' : '';
   document.getElementById('prefs').style.display = edit ? '' : 'none';
   document.getElementById('prefs-edit-btn').style.display = edit ? 'none' : '';
 }
+(function(){                                  // 记住开合：只是本机便利，读写失败就按默认
+  const d = document.getElementById('prefs-fold');
+  try {
+    const v = localStorage.getItem('sourcing.prefsOpen');
+    if (v !== null && d.dataset.force !== '1') d.open = v === '1';
+  } catch(e){}
+  d.addEventListener('toggle', ()=>{ try { localStorage.setItem('sourcing.prefsOpen', d.open ? '1' : '0'); } catch(e){} });
+})();
 async function savePrefs(btn){
   const data = {};
   new FormData(document.getElementById('prefs')).forEach((v,k)=>data[k]=v);

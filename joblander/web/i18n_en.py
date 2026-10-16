@@ -3,6 +3,7 @@
 EN: dict[str, str] = {'管理后台': 'Admin',
  'MyCareersFuture（新加坡）': 'MyCareersFuture (Singapore)',
  '停止': 'Stop',
+ '搜索偏好与渠道（{k} 个关键词 · {l} 个地点）': 'Search preferences & channels ({k} keywords · {l} locations)',
  '远程': 'Remote',
  '打开岗位原文': 'Open the original job posting',
  '每晚自动搜新机会': 'Nightly automatic search',
