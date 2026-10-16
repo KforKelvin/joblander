@@ -53,6 +53,43 @@ def save_prefs(cfg, patch: dict[str, Any]) -> dict[str, Any]:
     return prefs
 
 
+# 线索里存的 JD 正文长度 = 初筛读的长度。原先只留 2500 字：多数 JD 的 Requirements
+# 段在后半截，年限/硬性要求被截掉，初筛和年限过滤都看不到。
+JD_KEEP = 6000
+
+# ---------- JD 年限要求（零 LLM） ----------
+_NUMW = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7,
+         "eight": 8, "nine": 9, "ten": 10, "twelve": 12, "fifteen": 15}
+_N = r"(\d{1,2}|" + "|".join(_NUMW) + r")"
+_YOE = re.compile(
+    r"(?:(?:minimum|at least|min\.?)\s+(?:of\s+)?)?" + _N + r"(?:\s*\+|\s*(?:-|–|to)\s*" + _N + r")?\s*\+?\s*"
+    r"(?:\(\s*\d+\s*\)\s*)?years?(?:'|’)?\s+(?:of\s+)?(?:[\w/&,-]+\s+){0,6}?experience", re.I)
+
+
+def extract_min_yoe(text: str) -> int | None:
+    """JD 里「N+ years (of …) experience」「N-M years」「Four to five years」→ 最低年限。
+    多条要求取各条下限里最大的那个（5+ 年 Python、2+ 年 AWS → 5）；只认紧跟 experience 的，
+    「公司 25 年历史」这类不算；1-15 之外当噪声丢掉。读不出给 None——不猜。"""
+    vals = []
+    for m in _YOE.finditer(text or ""):
+        tail = re.split(r"[.;\n]", (text or "")[m.end():m.end() + 80])[0]
+        if re.search(r"preferred|a plus|nice to have|desired", tail, re.I):
+            continue                              # 同一句里标了加分项：不是硬性要求
+        x = m.group(1)
+        lo = int(x) if x.isdigit() else _NUMW[x.lower()]
+        if 1 <= lo <= 15:
+            vals.append(lo)
+    return max(vals) if vals else None
+
+
+def max_yoe_pref(prefs: dict[str, Any]) -> int | None:
+    try:
+        v = prefs.get("max_yoe")
+        return int(v) if v not in (None, "") else None
+    except (TypeError, ValueError):
+        return None
+
+
 def prefs_text(prefs: dict[str, Any]) -> str:
     """偏好 → fit 评估用的紧凑文本。"""
     lines = []
@@ -64,6 +101,8 @@ def prefs_text(prefs: dict[str, Any]) -> str:
         lines.append(f"地点偏好：{'、'.join(prefs['locations'])}")
     if prefs.get("exclude"):
         lines.append(f"排除：{'、'.join(prefs['exclude'])}")
+    if max_yoe_pref(prefs) is not None:
+        lines.append(f"年限上限：只看最低年限要求 ≤ {max_yoe_pref(prefs)} 年的岗位")
     if prefs.get("notes"):
         lines.append(f"补充：{prefs['notes']}")
     return "\n".join(lines) or "（未配置偏好）"
@@ -91,7 +130,8 @@ FIT_SYSTEM = """你是求职作战系统的侦察评估官。对照候选人的�
 {"fit": 1-5, "why": "一句话：为什么值得看/不值得看",
  "flags": ["注意点，如：中介代招、外包/合同岗、方向偏差"],
  "req_gaps": [{"req": "逐字摘出的 JD 硬性要求（YoE/语言/签证/学历/必备技能/行业经验）",
-               "verdict": "不符|存疑", "note": "对照履历的一句话，如『简历约 6 年，JD 要 8 年』"}]}
+               "verdict": "不符|存疑", "note": "对照履历的一句话，如『简历约 6 年，JD 要 8 年』"}],
+ "min_yoe": "JD 硬性要求的最低工作年限（整数；多条取其中最高的下限；JD 没写或只写 preferred 给 null）"}
 初筛纪律：只抠**硬性** requirements（must-have），nice-to-have 不算；履历里明确满足的不列；
 无法从履历判断的标『存疑』不许猜。**任何一条『不符』→ fit ≤ 2**（如 JD 要求泰语/特定行业年限）。
 口径：5=高度对口马上看；4=对口；3=可看可不看；2=勉强/有硬伤；1=明显不符。
@@ -116,6 +156,13 @@ def _profile_digest(cfg, limit: int = 12000) -> str:
     return "\n\n".join(parts)[:limit]
 
 
+def _as_int(v: Any) -> int | None:
+    try:
+        return int(v) if v not in (None, "", "null") else None
+    except (TypeError, ValueError):
+        return None
+
+
 def assess_fit(cfg, llm, lead: dict[str, Any], jd_text: str = "") -> dict[str, Any]:
     prefs = load_prefs(cfg)
     if not prefs:
@@ -128,13 +175,14 @@ def assess_fit(cfg, llm, lead: dict[str, Any], jd_text: str = "") -> dict[str, A
         f"候选人偏好：\n{prefs_text(prefs)}\n\n"
         f"候选人履历摘要：\n{profile or '（弹药库为空——req_gaps 全部标存疑）'}\n\n"
         f"岗位线索：\n{json.dumps(brief, ensure_ascii=False)}\n\n"
-        f"JD 正文：\n{(jd_text or '（无）')[:6000]}",
+        f"JD 正文：\n{(jd_text or '（无）')[:JD_KEEP]}",
         system=FIT_SYSTEM, json_mode=True)
     try:
         fit = json.loads(_strip_fences(raw))
         return {"fit": int(fit.get("fit", 0)) or None,
                 "why": fit.get("why", ""), "flags": fit.get("flags") or [],
-                "req_gaps": fit.get("req_gaps") or []}
+                "req_gaps": fit.get("req_gaps") or [],
+                "min_yoe": _as_int(fit.get("min_yoe"))}
     except Exception:
         return {}
 
@@ -198,7 +246,7 @@ def mcf_to_lead(job: dict[str, Any], detail: dict[str, Any] | None = None,
         "contact": {"channel": "mcf"},
     }
     if detail:
-        lead["jd_excerpt"] = _strip_html(detail.get("description") or "")[:2500]
+        lead["jd_excerpt"] = _strip_html(detail.get("description") or "")[:JD_KEEP]
         lead["skills"] = [s.get("skill") for s in (detail.get("skills") or [])][:15]
         if detail.get("minimumYearsExperience") is not None:
             lead["min_yoe"] = detail["minimumYearsExperience"]
@@ -253,6 +301,7 @@ class _Run:
         self.cutoff = (datetime.now(SGT) - timedelta(days=days)).strftime("%Y-%m-%d")
         self.run_keys: set[tuple[str, str]] = set()
         self.excl = [e.casefold() for e in self.prefs.get("exclude") or []]
+        self.max_yoe = max_yoe_pref(self.prefs)
         self.outs: list[Path] = []
         self.fetched = 0
         from joblander.llm import output_lang
@@ -286,11 +335,31 @@ class _Run:
             return None
         return verdict
 
+    def _over_yoe(self, lead: dict[str, Any], yoe: int | None, by: str) -> bool:
+        """年限超过偏好上限 → 丢弃记账（uid 已在 admit 记为见过，下轮不再提）。"""
+        if self.max_yoe is None or yoe is None or yoe <= self.max_yoe:
+            return False
+        self.log.append("lead.discarded", f"joblander.sourcing.{self.source}",
+                        {"reason": "yoe_over", "min_yoe": yoe, "max_yoe": self.max_yoe, "by": by,
+                         "company": lead.get("company"), "position": lead.get("position")})
+        return True
+
     def propose(self, lead: dict[str, Any], verdict: dict[str, Any], kw: str, uid: str) -> None:
+        if lead.get("min_yoe") is None:
+            y = extract_min_yoe(lead.get("jd_excerpt", ""))
+            if y is not None:
+                lead["min_yoe"] = y
+        if self._over_yoe(lead, lead.get("min_yoe"), "jd"):      # 评分前就筛掉：省一次 LLM
+            return
+        fit = assess_fit(self.cfg, self.llm, lead, jd_text=lead.get("jd_excerpt", ""))
+        if lead.get("min_yoe") is None and (fit or {}).get("min_yoe") is not None:
+            lead["min_yoe"] = fit["min_yoe"]                       # 正则没读出、评分器读出了
+            if self._over_yoe(lead, lead["min_yoe"], "llm"):
+                return
         proposal = {
             "kind": "lead.intake", "lead": lead, "dedupe": verdict,
             "source_hint": self.source,
-            "fit": assess_fit(self.cfg, self.llm, lead, jd_text=lead.get("jd_excerpt", "")),
+            "fit": fit,
             "raw_excerpt": f"{self.source.upper()} {kw} · {lead.get('position')} @ {lead.get('company')}",
             "approved": None,
         }
@@ -434,7 +503,7 @@ def linkedin_to_lead(card: dict[str, str], detail: dict[str, Any] | None = None,
         "contact": {"channel": "linkedin"},
     }
     if detail:
-        lead["jd_excerpt"] = (detail.get("description") or "")[:2500]
+        lead["jd_excerpt"] = (detail.get("description") or "")[:JD_KEEP]
         crit = detail.get("criteria") or {}
         if crit.get("Seniority level"):
             lead["highlight"] += ("; " if lang == "en" else "；") + crit["Seniority level"]

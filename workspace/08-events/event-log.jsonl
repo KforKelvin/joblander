@@ -1531,3 +1531,7 @@
 {"ts": "2026-10-16T15:19:03-05:00", "kind": "row.archived", "source": "human_direct", "payload": {"page_id": "local-0c41647cd79c", "company": "MilliporeSigma", "notion": false}}
 {"ts": "2026-10-16T15:19:34-05:00", "kind": "sourcing.prefs_updated", "source": "human_direct", "payload": {"fields": ["exclude", "guessed", "intent", "keywords", "linkedin_profile", "locations", "notes", "targets"]}}
 {"ts": "2026-10-16T15:21:20-05:00", "kind": "row.archived", "source": "human_direct", "payload": {"page_id": "local-28f615cfbc00", "company": "NOV", "notion": false}}
+{"ts": "2026-10-17T04:31:42+08:00", "kind": "task.failed", "source": "web", "payload": {"kind": "sourcing", "label": "搜新机会", "error": "缺 OPENAI_API_KEY 环境变量"}}
+{"ts": "2026-10-16T15:31:53-05:00", "kind": "sourcing.prefs_updated", "source": "human_direct", "payload": {"fields": ["max_yoe"]}}
+{"ts": "2026-10-16T15:33:35-05:00", "kind": "daemon.started", "source": "daemon", "payload": {"jobs": ["transcript_watch", "calendar_watch", "notion_diff_pull", "gmail_scan", "nightly_sourcing", "morning_report", "evening_diary", "weekly_report"]}}
+{"ts": "2026-10-16T15:34:30-05:00", "kind": "sourcing.prefs_updated", "source": "human_direct", "payload": {"fields": ["exclude", "guessed", "intent", "keywords", "linkedin_profile", "locations", "max_yoe", "notes", "targets"]}}

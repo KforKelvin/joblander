@@ -171,3 +171,39 @@ def test_nightly_switch_off_means_manual_only(cfg, monkeypatch):
     cfg.raw["features"] = {"nightly": True}
     d.job_nightly_sourcing()
     assert calls == [1]
+
+
+def test_extract_min_yoe():
+    f = sourcing.extract_min_yoe
+    assert f("7+ years of experience with SQL. 2+ years of experience in AWS") == 7
+    assert f("Four to five years of experience") == 4
+    assert f("One (1) year of experience") == 1
+    assert f("2-6 years of professional experience") == 2
+    assert f("At least one year of experience") == 1
+    assert f("3+ years’ experience in data") == 3
+    assert f("a company with over 25 years of experience") is None      # 公司历史不算
+    assert f("5 years experience preferred") is None                     # 加分项不算
+    assert f("3+ years of experience required; 6+ years of experience is a plus") == 3
+    assert f("") is None
+
+
+def test_max_yoe_pref_skips_before_scoring(cfg, monkeypatch):
+    """年限上限：JD 读出超限的不评分直接丢（省 LLM）；正则读不出、评分器读出超限的也丢；不超的照常提。"""
+    import json as _j
+    sourcing.save_prefs(cfg, {"max_yoe": 3})
+    scored = []
+
+    def fit(cfg, llm, lead, jd_text=""):
+        scored.append(lead["position"])
+        return {"fit": 4, "min_yoe": 6 if "Lead" in lead["position"] else None}
+    monkeypatch.setattr(sourcing, "assess_fit", fit)
+    run = sourcing._Run(cfg, FitLLM(), "linkedin", days=36500)
+    v = {"verdict": "new"}
+    run.propose({"company": "A", "position": "Senior DE", "jd_excerpt": "5+ years of experience in Python"}, v, "kw", "u1")
+    run.propose({"company": "B", "position": "Lead DE", "jd_excerpt": "seasoned engineer"}, v, "kw", "u2")
+    run.propose({"company": "C", "position": "DE", "jd_excerpt": "2+ years of experience with SQL"}, v, "kw", "u3")
+    assert scored == ["Lead DE", "DE"]                                 # 5 年的没花评分调用
+    assert len(run.outs) == 1
+    lead = _j.loads(run.outs[0].read_text(encoding="utf-8"))["lead"]
+    assert lead["company"] == "C" and lead["min_yoe"] == 2
+    assert "年限上限：只看最低年限要求 ≤ 3 年的岗位" in sourcing.prefs_text(sourcing.load_prefs(cfg))

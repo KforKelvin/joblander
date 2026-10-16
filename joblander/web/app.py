@@ -605,6 +605,11 @@ def create_app(with_daemon: bool = True) -> FastAPI:
         from joblander.sourcing import load_prefs, search_links
         from joblander.targets import load_status
         leads = _split_pending(list_pending(cfg))["lead"]
+        from joblander.sourcing import extract_min_yoe
+        for p in leads:                          # 旧线索没存年限：评分器读出的优先，否则现场从 JD 读
+            ld = p.setdefault("lead", {})
+            if ld.get("min_yoe") is None:
+                ld["min_yoe"] = (p.get("fit") or {}).get("min_yoe") or extract_min_yoe(ld.get("jd_excerpt", ""))
         glist: list[dict] = []
         for p in leads:
             name = (p.get("lead") or {}).get("company") or "公司未披露"
@@ -1573,6 +1578,11 @@ def create_app(with_daemon: bool = True) -> FastAPI:
             if k in form:
                 patch[k] = [s.strip() for s in form[k].replace("，", ",").split(",")
                             if s.strip()]
+        if "max_yoe" in form:                    # 年限上限：空 = 不限
+            v = form["max_yoe"].strip()
+            if v and not (v.isdigit() and 0 <= int(v) <= 30):
+                return JSONResponse({"error": _t("年限上限填 0-30 的整数，或留空表示不限")}, status_code=400)
+            patch["max_yoe"] = int(v) if v else None
         if "targets" in form:                    # 一行一家（名字或招聘页链接），也认逗号
             items = re.split(r"[\n,，]", form["targets"])
             patch["targets"] = list(dict.fromkeys(t.strip() for t in items if t.strip()))[:30]

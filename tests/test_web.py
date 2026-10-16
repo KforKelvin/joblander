@@ -1179,3 +1179,13 @@ def test_stop_button_for_stoppable_tasks(client, monkeypatch):
     assert A.TASKS[tid]["status"] == "stopped" and not cancel.requested()
     tid = A.start_task("sourcing", "搜新机会", lambda: None, stoppable=True)
     assert A.TASKS[tid]["status"] == "done"
+
+
+def test_prefs_max_yoe_roundtrip(client):
+    assert client.post("/api/sourcing/prefs", data={"max_yoe": "3"}).status_code == 200
+    assert "≤ 3" in client.get("/sourcing").text
+    assert client.post("/api/sourcing/prefs", data={"max_yoe": "abc"}).status_code == 400
+    assert client.post("/api/sourcing/prefs", data={"max_yoe": ""}).status_code == 200
+    from joblander.sourcing import load_prefs, max_yoe_pref
+    from joblander.web import app as A
+    assert max_yoe_pref(load_prefs(A.load_config())) is None

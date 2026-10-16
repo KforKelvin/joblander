@@ -12,8 +12,10 @@
 {% set warns = (p.fit or {}).get('flags') or [] %}
 {% set ndet = (1 if (p.fit or {}).get('why') else 0) + gaps|length + warns|length
               + (1 if p.lead.comp_mentions else 0) + (1 if p.lead.market_ref else 0) %}
+{% set yoe = p.lead.min_yoe %}
+{% set cap = prefs.get('max_yoe') %}
 <tr class="prop-lead" data-file="{{ p._file }}" data-flags="{{ flags|join(',') }}" data-loc="{{ loclab }}"
-    data-fit="{{ f or 0 }}" data-added="{{ p._created or '' }}">
+    data-fit="{{ f or 0 }}" data-added="{{ p._created or '' }}" data-yoe="{{ yoe if yoe is not none else 99 }}">
   <td class="cbx"><input type="checkbox" class="psel" onchange="selCount()" aria-label="{{ _('选中') }}"></td>
   <td><span class="pill {{ 'teal' if f and f>=4 else 'amber' if f==3 else 'gray' }}">{{ f or '—' }}/5</span></td>
   {# 来源标签即原帖链接，跟在公司名后面（不单占一列） #}
@@ -25,6 +27,7 @@
         {% if p.dedupe.verdict == 'group_conflict' %}<span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}</div>
       <div class="pos">{{ p.lead.position or '—' }}</div></td>
   <td>{% if loclab %}<span class="pill blue" title="{{ loc }}">{{ icon("pin", 11) }}{{ loclab }}</span>{% else %}—{% endif %}</td>
+  <td>{% if yoe is not none %}<span class="pill {{ 'red' if cap is not none and yoe > cap else 'gray' }}" title="{{ _('JD 要求的最低工作年限') }}">{{ _('{n}+ 年', n=yoe) }}</span>{% else %}<span class="note" style="margin:0" title="{{ _('JD 里没读出年限要求') }}">—</span>{% endif %}</td>
   <td class="num note" style="margin:0;white-space:nowrap" title="{{ _('进入待入池的时间') }}">{{ p._created or '—' }}</td>
   <td class="acts">
     {% if ndet %}<button class="btn ghost dtog" onclick="togLead(this)" aria-expanded="false" title="{{ _('评分理由、要求缺口与风险提示') }}">{{ _('详情') }} <span class="note">{{ ndet }}</span> <span class="chev">▸</span></button>{% endif %}
@@ -32,7 +35,7 @@
     <button class="btn danger" onclick="post('/api/proposal/reject',{file:'{{ p._file }}'},{btn:this,ok:{{ _('已否决')|jsq }},reload:true})">{{ _('否决') }}</button>
   </td>
 </tr>
-{% if ndet %}<tr class="lead-detail" style="display:none"><td></td><td colspan="5">
+{% if ndet %}<tr class="lead-detail" style="display:none"><td></td><td colspan="6">
   {% if (p.fit or {}).get('why') %}<div class="meta">{{ p.fit.why }}</div>{% endif %}
   {% for g in gaps %}
   <div class="meta" style="color:{{ 'var(--red)' if g.verdict=='不符' else 'var(--amber)' }}">{{ '⛔' if g.verdict=='不符' else '❓' }} {{ g.req }} — {{ g.note }}</div>
@@ -48,7 +51,7 @@
 <div class="card leadcard" style="padding:4px 8px;overflow-x:auto">
 <table class="leads" id="{{ tid }}">
 <thead><tr><th style="width:28px"></th><th class="sort" data-k="fit" style="width:64px">{{ _('匹配 ⇅') }}</th><th style="width:38%">{{ _('公司 / 岗位') }}</th>
-  <th class="sort" data-k="loc">{{ _('地点 ⇅') }}</th><th class="sort" data-k="added">{{ _('入库 ⇅') }}</th><th></th></tr></thead>
+  <th class="sort" data-k="loc">{{ _('地点 ⇅') }}</th><th class="sort" data-k="yoe">{{ _('年限 ⇅') }}</th><th class="sort" data-k="added">{{ _('入库 ⇅') }}</th><th></th></tr></thead>
 <tbody>
 {% for g in groups %}{% for p in g['items'] %}{{ leadrow(p, g.company) }}{% endfor %}{% endfor %}
 </tbody>
@@ -129,6 +132,7 @@
         {% if prefs.get('targets') %}<div class="note" style="margin:4px 0 0">{{ _('数字是你所在地点的在招岗数；悬停看详情') }}</div>{% endif %}
       </span></div>
       <div class="kvline"><span>{{ _('地点') }}</span><span>{% for l in prefs.get('locations') or [] %}<span class="pill blue">{{ l }}</span> {% else %}—{% endfor %}</span></div>
+      <div class="kvline"><span>{{ _('年限上限') }}</span><span>{% if prefs.get('max_yoe') is not none %}{{ _('只看要求 ≤ {n} 年的岗位', n=prefs.max_yoe) }}{% else %}—{% endif %}</span></div>
       <div class="kvline"><span>{{ _('排除词') }}</span><span>{% for e in prefs.get('exclude') or [] %}<span class="pill red">{{ e }}</span> {% else %}—{% endfor %}</span></div>
       <div class="kvline" style="align-items:flex-start"><span>{{ _('补充偏好') }}</span><span style="text-align:right;font-size:12.5px;max-width:75%">{{ prefs.get('notes') or '—' }}</span></div>
       <div class="kvline"><span>LinkedIn</span>{% if prefs.get('linkedin_profile') %}<a href="{{ prefs.linkedin_profile }}" target="_blank">{{ prefs.linkedin_profile.replace('https://www.','') }} ↗</a>{% else %}—{% endif %}</div>
@@ -144,6 +148,8 @@
       <textarea name="targets" style="min-height:80px" placeholder="Stripe&#10;https://jobs.lever.co/example">{{ (prefs.get('targets') or []) | join('\n') }}</textarea>
       <label>{{ _('地点（逗号分隔；写「Remote United States」= 该地区的远程岗位）') }}</label>
       <input type="text" name="locations" value="{{ (prefs.get('locations') or []) | join(', ') }}">
+      <label>{{ _('年限上限（JD 要求的最低年限超过它就不进待入池；空 = 不限）') }}</label>
+      <input type="number" name="max_yoe" min="0" max="30" step="1" style="width:120px" value="{{ prefs.get('max_yoe') if prefs.get('max_yoe') is not none else '' }}">
       <label>{{ _('排除词（命中直接丢弃，不进待入池）') }}</label>
       <input type="text" name="exclude" value="{{ (prefs.get('exclude') or []) | join(', ') }}">
       <label>{{ _('补充偏好（自由文本：公司类型、避雷、加分项）') }}</label>
@@ -274,8 +280,8 @@ function filterLoc(v){
 const sortAsc = {};
 document.querySelectorAll('table.leads th.sort').forEach(th=>{ th.style.cursor = 'pointer'; th.onclick = ()=>{
   const t = th.closest('table'), k = th.dataset.k, key = t.id + k;
-  sortAsc[key] = key in sortAsc ? !sortAsc[key] : k === 'loc';   // 首次点：匹配/入库从高到低，地点 A→Z
-  const val = r => k === 'fit' ? +r.dataset.fit : k === 'loc' ? (r.dataset.loc || '~') : r.dataset.added;
+  sortAsc[key] = key in sortAsc ? !sortAsc[key] : (k === 'loc' || k === 'yoe');   // 首次点：匹配/入库从高到低，地点 A→Z，年限从低到高
+  const val = r => k === 'fit' ? +r.dataset.fit : k === 'yoe' ? +r.dataset.yoe : k === 'loc' ? (r.dataset.loc || '~') : r.dataset.added;
   const body = t.tBodies[0];
   [...body.querySelectorAll('tr.prop-lead')]
     .sort((a, b)=>{ const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * (sortAsc[key] ? 1 : -1); })

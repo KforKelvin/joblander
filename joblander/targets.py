@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 from joblander import cancel
-from joblander.sourcing import (SGT, _Run, _profile_digest, _strip_html, _txt,
+from joblander.sourcing import (JD_KEEP, SGT, _Run, _profile_digest, _strip_html, _txt,
                                 load_prefs, prefs_text)
 
 UA = {"User-Agent": "Mozilla/5.0 (joblander)"}
@@ -267,7 +267,7 @@ def to_lead(job: dict[str, Any], company: str, via: str, lang: str = "zh") -> di
             "comp_mentions": [], "urls": [job["url"]] if job.get("url") else [],
             "highlight": f"{tx[via]} {job.get('posted') or ''}".strip(),
             "suggested_next_step": tx["next"], "contact": {"channel": "careers"},
-            "jd_excerpt": (job.get("jd") or "")[:2500], "target": True}
+            "jd_excerpt": (job.get("jd") or "")[:JD_KEEP], "target": True}
 
 
 def _fill_jd(cfg, job: dict[str, Any], lead: dict[str, Any], lang: str) -> dict[str, Any]:
@@ -278,7 +278,7 @@ def _fill_jd(cfg, job: dict[str, Any], lead: dict[str, Any], lang: str) -> dict[
             return sourcing.mcf_to_lead(job["mcf"], sourcing.mcf_job_detail(job["uid"][4:]), lang=lang) | {"target": True}
         if job.get("li_id"):
             d = sourcing.parse_linkedin_detail(sourcing._li_get(sourcing.LI_DETAIL.format(id=job["li_id"])))
-            lead["jd_excerpt"] = (d.get("description") or "")[:2500]
+            lead["jd_excerpt"] = (d.get("description") or "")[:JD_KEEP]
     except Exception:
         pass
     return lead
