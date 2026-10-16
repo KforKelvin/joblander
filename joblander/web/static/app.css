@@ -177,7 +177,7 @@ td .pos{color:var(--ink-2);font-size:12.5px}
 /* 新机会：待入池表格（沿用全局 table/th/td 与 .co/.pos，同作战室） */
 table.leads td{vertical-align:middle}
 table.leads td.cbx input{width:auto;margin:0}
-table.leads td .pos .pill{margin-left:6px;vertical-align:1px}
+table.leads td .co .pill{margin-left:6px;vertical-align:1px;font-weight:600}
 table.leads td.acts{white-space:nowrap;text-align:right}
 table.leads td.acts .btn{height:28px;padding:0 10px;font-size:12.5px}
 table.leads .btn.ghost{border-color:transparent;box-shadow:none;background:transparent;color:var(--ink-2)}

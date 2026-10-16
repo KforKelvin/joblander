@@ -16,13 +16,14 @@
     data-fit="{{ f or 0 }}" data-added="{{ p._created or '' }}">
   <td class="cbx"><input type="checkbox" class="psel" onchange="selCount()" aria-label="{{ _('选中') }}"></td>
   <td><span class="pill {{ 'teal' if f and f>=4 else 'amber' if f==3 else 'gray' }}">{{ f or '—' }}/5</span></td>
-  <td><div class="co">{{ company }}{% if p.dedupe.verdict == 'group_conflict' %} <span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}</div>
-      {# 来源标签即原帖链接，跟在岗位名后面（不单占一列） #}
-      {% set srccls = 'pill teal' if p.lead.target else 'pill gray' %}
-      {% set srclab = _('目标公司') if p.lead.target else p.source_hint %}
-      <div class="pos">{{ p.lead.position or '—' }}
+  {# 来源标签即原帖链接，跟在公司名后面（不单占一列） #}
+  {% set srccls = 'pill teal' if p.lead.target else 'pill gray' %}
+  {% set srclab = _('目标公司') if p.lead.target else p.source_hint %}
+  <td><div class="co">{{ company }}
         {% if p.lead.urls %}<a class="{{ srccls }} pill-link" href="{{ p.lead.urls[0] }}" target="_blank" rel="noopener" title="{{ _('打开岗位原文') }}">{{ srclab }} {{ icon("external", 10) }}</a>
-        {% else %}<span class="{{ srccls }}">{{ srclab }}</span>{% endif %}</div></td>
+        {% else %}<span class="{{ srccls }}">{{ srclab }}</span>{% endif %}
+        {% if p.dedupe.verdict == 'group_conflict' %}<span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}</div>
+      <div class="pos">{{ p.lead.position or '—' }}</div></td>
   <td>{% if loclab %}<span class="pill blue" title="{{ loc }}">{{ icon("pin", 11) }}{{ loclab }}</span>{% else %}—{% endif %}</td>
   <td class="num note" style="margin:0;white-space:nowrap" title="{{ _('进入待入池的时间') }}">{{ p._created or '—' }}</td>
   <td class="acts">
