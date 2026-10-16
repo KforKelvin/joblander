@@ -1,43 +1,62 @@
 {% extends "base.html" %}
 {% block title %}{{ _('新机会') }} · joblander{% endblock %}
 {% block main %}
-{% macro leadrow(p) %}
+{% macro leadrow(p, company) %}
 {% set f = (p.fit or {}).get('fit') %}
 {% set flags = [] %}
 {% if p.dedupe.verdict in ('duplicate','group_conflict') %}{% set _void = flags.append('dup') %}{% endif %}
 {% if not f or f <= 2 %}{% set _void = flags.append('lowfit') %}{% endif %}
-<div class="row prop-lead" data-file="{{ p._file }}" data-flags="{{ flags|join(',') }}">
-  <input type="checkbox" class="psel" onchange="selCount()" style="width:auto;margin-top:4px">
-  <span class="pill {{ 'teal' if f and f>=4 else 'amber' if f==3 else 'gray' }}" style="margin-top:2px">{{ f or '—' }}/5</span>
-  <div class="body">
-    <b style="font-weight:600">{{ p.lead.position or '—' }}</b>
-    {% if p.lead.target %}<span class="pill teal">{{ _('目标公司') }}</span>{% else %}<span class="pill gray">{{ p.source_hint }}</span>{% endif %}
-    {% set loc = (p.lead.location or '')|trim %}
-    {% if p.lead.remote or loc %}<span class="pill blue" title="{{ loc }}">{{ icon("pin", 11) }}{{ _('远程') if p.lead.remote or 'remote' in loc|lower else loc.split(',')[0] }}</span>{% endif %}
-    {% if p.dedupe.verdict == 'group_conflict' %}<span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}
-    {% if p.lead.urls %}<a class="btn xs" href="{{ p.lead.urls[0] }}" target="_blank" rel="noopener" title="{{ _('打开岗位原文') }}">JD {{ icon("external", 11) }}</a>{% endif %}
-    <span class="note" style="margin:0" title="{{ _('进入待入池的时间') }}">{{ _('入库') }} {{ p._created or '—' }}</span>
-    {% if (p.fit or {}).get('why') %}<div class="meta">{{ p.fit.why }}</div>{% endif %}
-    {% for g in (p.fit or {}).get('req_gaps') or [] %}
-    <div class="meta" style="color:{{ 'var(--red)' if g.verdict=='不符' else 'var(--amber)' }}">{{ '⛔' if g.verdict=='不符' else '❓' }} {{ g.req }} — {{ g.note }}</div>
-    {% endfor %}
-    {% for fl in (p.fit or {}).get('flags') or [] %}<div class="meta warnln">{{ icon("alert", 13) }}{{ fl }}</div>{% endfor %}
-    {% if p.lead.comp_mentions %}<div class="meta">{{ icon("coins", 13) }}{{ p.lead.comp_mentions | join('；') }}</div>{% endif %}
-    {% if p.lead.market_ref %}<div class="meta">📊 {{ p.lead.market_ref }}</div>{% endif %}
-  </div>
-  <button class="btn pri" onclick="post('/api/proposal/apply',{file:'{{ p._file }}'},{btn:this,ok:{{ _('已入池')|jsq }},reload:true})" title="{{ _('tracker 建行（线索列）+ 建公司档案') }}">{{ _('批准入池') }}</button>
-  <button class="btn danger" onclick="post('/api/proposal/reject',{file:'{{ p._file }}'},{btn:this,ok:{{ _('已否决')|jsq }},reload:true})">{{ _('否决') }}</button>
-</div>
+{% set loc = (p.lead.location or '')|trim %}
+{% set loclab = _('远程') if p.lead.remote or 'remote' in loc|lower else loc.split(',')[0]|trim %}
+{% set gaps = (p.fit or {}).get('req_gaps') or [] %}
+{% set warns = (p.fit or {}).get('flags') or [] %}
+{% set ndet = (1 if (p.fit or {}).get('why') else 0) + gaps|length + warns|length
+              + (1 if p.lead.comp_mentions else 0) + (1 if p.lead.market_ref else 0) %}
+<tr class="prop-lead" data-file="{{ p._file }}" data-flags="{{ flags|join(',') }}" data-loc="{{ loclab }}"
+    data-fit="{{ f or 0 }}" data-added="{{ p._created or '' }}">
+  <td class="cbx"><input type="checkbox" class="psel" onchange="selCount()" aria-label="{{ _('选中') }}"></td>
+  <td><span class="pill {{ 'teal' if f and f>=4 else 'amber' if f==3 else 'gray' }}">{{ f or '—' }}/5</span></td>
+  <td><div class="co">{{ company }}{% if p.dedupe.verdict == 'group_conflict' %} <span class="pill amber">{{ _('集团冲突：') }}{{ p.dedupe.active_members|join('、') }}</span>{% endif %}</div>
+      {# 来源标签即原帖链接，跟在岗位名后面（不单占一列） #}
+      {% set srccls = 'pill teal' if p.lead.target else 'pill gray' %}
+      {% set srclab = _('目标公司') if p.lead.target else p.source_hint %}
+      <div class="pos">{{ p.lead.position or '—' }}
+        {% if p.lead.urls %}<a class="{{ srccls }} pill-link" href="{{ p.lead.urls[0] }}" target="_blank" rel="noopener" title="{{ _('打开岗位原文') }}">{{ srclab }} {{ icon("external", 10) }}</a>
+        {% else %}<span class="{{ srccls }}">{{ srclab }}</span>{% endif %}</div></td>
+  <td>{% if loclab %}<span class="pill blue" title="{{ loc }}">{{ icon("pin", 11) }}{{ loclab }}</span>{% else %}—{% endif %}</td>
+  <td class="num note" style="margin:0;white-space:nowrap" title="{{ _('进入待入池的时间') }}">{{ p._created or '—' }}</td>
+  <td class="acts">
+    {% if ndet %}<button class="btn ghost dtog" onclick="togLead(this)" aria-expanded="false" title="{{ _('评分理由、要求缺口与风险提示') }}">{{ _('详情') }} <span class="note">{{ ndet }}</span> <span class="chev">▸</span></button>{% endif %}
+    <button class="btn pri" onclick="post('/api/proposal/apply',{file:'{{ p._file }}'},{btn:this,ok:{{ _('已入池')|jsq }},reload:true})" title="{{ _('tracker 建行（线索列）+ 建公司档案') }}">{{ _('批准入池') }}</button>
+    <button class="btn danger" onclick="post('/api/proposal/reject',{file:'{{ p._file }}'},{btn:this,ok:{{ _('已否决')|jsq }},reload:true})">{{ _('否决') }}</button>
+  </td>
+</tr>
+{% if ndet %}<tr class="lead-detail" style="display:none"><td></td><td colspan="5">
+  {% if (p.fit or {}).get('why') %}<div class="meta">{{ p.fit.why }}</div>{% endif %}
+  {% for g in gaps %}
+  <div class="meta" style="color:{{ 'var(--red)' if g.verdict=='不符' else 'var(--amber)' }}">{{ '⛔' if g.verdict=='不符' else '❓' }} {{ g.req }} — {{ g.note }}</div>
+  {% endfor %}
+  {% for fl in warns %}<div class="meta warnln">{{ icon("alert", 13) }}{{ fl }}</div>{% endfor %}
+  {% if p.lead.comp_mentions %}<div class="meta">{{ icon("coins", 13) }}{{ p.lead.comp_mentions | join('；') }}</div>{% endif %}
+  {% if p.lead.market_ref %}<div class="meta">📊 {{ p.lead.market_ref }}</div>{% endif %}
+</td></tr>{% endif %}
 {% endmacro %}
 
-{% macro groupcard(g) %}
-<div class="card" style="margin-bottom:10px;padding:10px 16px">
-  <div style="display:flex;gap:10px;align-items:center;padding:4px 0 2px">
-    <span class="fitbox {{ 'g' if g.best>=4 else 'a' if g.best==3 else 'x' }}">{{ g.best or '—' }}<i>/5</i></span>
-    <b style="font-size:14px">{{ g.company }}</b>
-    {% if g['items']|length > 1 %}<span class="note">{{ _('{n} 个岗位', n=g['items']|length) }}</span>{% endif %}
-  </div>
-  {% for p in g['items'] %}{{ leadrow(p) }}{% endfor %}
+{% macro leadtable(groups, tid) %}
+{# 一行一个岗位；同公司的岗位挨着（组内按匹配度），组按最高分排——与原先的公司卡片同序 #}
+<div class="card leadcard" style="padding:4px 8px;overflow-x:auto">
+<table class="leads" id="{{ tid }}">
+<thead><tr><th style="width:28px"></th><th class="sort" data-k="fit" style="width:64px">{{ _('匹配 ⇅') }}</th><th style="width:38%">{{ _('公司 / 岗位') }}</th>
+  <th class="sort" data-k="loc">{{ _('地点 ⇅') }}</th><th class="sort" data-k="added">{{ _('入库 ⇅') }}</th><th></th></tr></thead>
+<tbody>
+{% for g in groups %}{% for p in g['items'] %}{{ leadrow(p, g.company) }}{% endfor %}{% endfor %}
+</tbody>
+</table>
+<div class="pager" data-for="{{ tid }}">
+  <button class="btn" onclick="turnPage('{{ tid }}',-1)">{{ _('‹ 上一页') }}</button>
+  <span class="note pginfo"></span>
+  <button class="btn" onclick="turnPage('{{ tid }}',1)">{{ _('下一页 ›') }}</button>
+</div>
 </div>
 {% endmacro %}
 <div class="topbar"><span class="crumb"><b>{{ _('新机会') }}</b></span><span class="sp"></span>
@@ -166,17 +185,21 @@
 </details>
 <h2>{{ _('待入池（{n} 岗 · 按公司聚合，已在库公司不出现在这里）', n=total) }}</h2>
 {% if good or low %}
-<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+  <select id="locf" onchange="filterLoc(this.value)" title="{{ _('按地点筛选') }}" style="width:auto;min-height:32px;height:32px;padding:0 28px 0 10px">
+    <option value="">{{ _('全部地点') }}</option>
+  </select>
+  <span class="sp"></span>
   <button class="btn" onclick="selBy('lowfit')">{{ _('选低匹配') }}</button>
   <button class="btn" onclick="selBy('all')">{{ _('全选') }}</button>
   <button class="btn" onclick="selBy('')">{{ _('清除') }}</button>
-  <span class="sp"></span>
+  <button class="btn" id="dall" onclick="togAllLeads(this)">{{ _('展开全部详情') }}</button>
   <button class="btn danger" onclick="batchReject(this)" title="{{ _('所选全部否决——只记账，可反悔') }}"><span>{{ _('否决所选') }} (<span id="seln">0</span>)</span></button>
 </div>
-{% for g in good %}{{ groupcard(g) }}{% endfor %}
+{% if good %}{{ leadtable(good, 'lt-good') }}{% endif %}
 {% if low %}
-<details {{ 'open' if not good }}><summary class="note" style="cursor:pointer">{{ _('低匹配 / 未评分（{n} 家）——大概率不值得看，展开确认后批量否决', n=low|length) }}</summary>
-<div style="margin-top:8px">{% for g in low %}{{ groupcard(g) }}{% endfor %}</div>
+<details id="lowfold" style="margin-top:12px" {{ 'open' if not good }}><summary class="note" style="cursor:pointer">{{ _('低匹配 / 未评分（{n} 家）——大概率不值得看，展开确认后批量否决', n=low|length) }}</summary>
+<div style="margin-top:8px">{{ leadtable(low, 'lt-low') }}</div>
 </details>
 {% endif %}
 {% else %}
@@ -185,8 +208,56 @@
 
 
 <script>
-function selBy(flag){
-  document.querySelectorAll('.prop-lead').forEach(p=>{
+const PAGE = 25;                               // 每页 25 行；超过就分页
+const NOLOC = {{ _('未注明地点')|jsq }};
+const pageOf = {};
+function leadTables(){ return [...document.querySelectorAll('table.leads')]; }
+function matches(r){ const v = (document.getElementById('locf') || {}).value || ''; return !v || (r.dataset.loc || NOLOC) === v; }
+function detailOf(r){ const d = r.nextElementSibling; return d && d.classList.contains('lead-detail') ? d : null; }
+function render(){                             // 地点筛选 × 当前页 → 哪些行可见；详情行跟着自己那行走
+  leadTables().forEach(t=>{
+    const rows = [...t.querySelectorAll('tr.prop-lead')];
+    const hit = rows.filter(matches);
+    const pages = Math.max(1, Math.ceil(hit.length / PAGE));
+    const pg = pageOf[t.id] = Math.min(pageOf[t.id] || 0, pages - 1);
+    const on = new Set(hit.slice(pg * PAGE, (pg + 1) * PAGE));
+    rows.forEach(r=>{
+      const show = on.has(r);
+      r.style.display = show ? '' : 'none';
+      if (!matches(r)) r.querySelector('.psel').checked = false;   // 被筛掉的不留勾
+      const d = detailOf(r);
+      if (d) d.style.display = show && r.classList.contains('open') ? '' : 'none';
+    });
+    const pager = t.parentElement.querySelector('.pager');
+    pager.style.display = hit.length > PAGE ? '' : 'none';
+    pager.querySelector('.pginfo').textContent = {{ _('第 {p} / {n} 页 · 共 {c} 条')|jsq }}
+      .replace('{p}', pg + 1).replace('{n}', pages).replace('{c}', hit.length);
+    const [prev, next] = pager.querySelectorAll('.btn');
+    prev.disabled = pg === 0; next.disabled = pg >= pages - 1;
+    t.closest('.leadcard').style.display = hit.length ? '' : 'none';
+  });
+  const low = document.getElementById('lowfold');
+  if (low) low.style.display = [...low.querySelectorAll('tr.prop-lead')].some(matches) ? '' : 'none';
+  selCount();
+}
+function turnPage(tid, d){ pageOf[tid] = Math.max(0, (pageOf[tid] || 0) + d); render();
+  document.getElementById(tid).closest('.leadcard').scrollIntoView({block:'start', behavior:'smooth'}); }
+function togLead(btn, force){
+  const r = btn.closest('tr.prop-lead'), open = force === undefined ? !r.classList.contains('open') : force;
+  r.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open);
+  const d = detailOf(r);
+  if (d) d.style.display = open && r.style.display !== 'none' ? '' : 'none';
+}
+function togAllLeads(btn){
+  const open = btn.dataset.open !== '1';
+  btn.dataset.open = open ? '1' : '0';
+  btn.textContent = open ? {{ _('收起全部详情')|jsq }} : {{ _('展开全部详情')|jsq }};
+  document.querySelectorAll('tr.prop-lead .dtog').forEach(b=>togLead(b, open));
+}
+function selBy(flag){                          // 只动当前看得见的行（本页、未被地点筛掉）——否决所选不误伤
+  document.querySelectorAll('tr.prop-lead').forEach(p=>{
+    if (p.style.display === 'none' || p.closest('details:not([open])')) return;   // 收起的低匹配区也不动
     const cb = p.querySelector('.psel');
     if (flag==='') cb.checked = false;
     else if (flag==='all') cb.checked = true;
@@ -194,12 +265,41 @@ function selBy(flag){
   });
   selCount();
 }
+function filterLoc(v){
+  leadTables().forEach(t=>pageOf[t.id] = 0);
+  try { localStorage.setItem('sourcing.locFilter', v); } catch(e){}
+  render();
+}
+const sortAsc = {};
+document.querySelectorAll('table.leads th.sort').forEach(th=>{ th.style.cursor = 'pointer'; th.onclick = ()=>{
+  const t = th.closest('table'), k = th.dataset.k, key = t.id + k;
+  sortAsc[key] = key in sortAsc ? !sortAsc[key] : k === 'loc';   // 首次点：匹配/入库从高到低，地点 A→Z
+  const val = r => k === 'fit' ? +r.dataset.fit : k === 'loc' ? (r.dataset.loc || '~') : r.dataset.added;
+  const body = t.tBodies[0];
+  [...body.querySelectorAll('tr.prop-lead')]
+    .sort((a, b)=>{ const x = val(a), y = val(b); return (x < y ? -1 : x > y ? 1 : 0) * (sortAsc[key] ? 1 : -1); })
+    .forEach(r=>{ const d = detailOf(r); body.appendChild(r); if (d) body.appendChild(d); });   // 详情行跟着搬
+  pageOf[t.id] = 0; render();
+}; });
+(function(){                                   // 下拉项 = 当前线索里出现过的地点（带条数），按条数降序
+  const sel = document.getElementById('locf');
+  if (!sel) return;
+  const n = {};
+  document.querySelectorAll('tr.prop-lead').forEach(p=>{ const k = p.dataset.loc || NOLOC; n[k] = (n[k]||0) + 1; });
+  Object.entries(n).sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])).forEach(([k,c])=>{
+    const o = document.createElement('option'); o.value = k; o.textContent = `${k} (${c})`; sel.appendChild(o);
+  });
+  let v = '';
+  try { v = localStorage.getItem('sourcing.locFilter') || ''; } catch(e){}
+  if (v && n[v]) sel.value = v;
+  render();
+})();
 function selCount(){
   const el = document.getElementById('seln');
   if (el) el.textContent = document.querySelectorAll('.psel:checked').length;
 }
 async function batchReject(btn){
-  const sel = [...document.querySelectorAll('.psel:checked')].map(cb=>cb.closest('.prop-lead').dataset.file);
+  const sel = [...document.querySelectorAll('.psel:checked')].map(cb=>cb.closest('tr.prop-lead').dataset.file);
   if (!sel.length) { toast({{ _('先勾几条')|jsq }}); return; }
   btn.disabled = true; let done = 0;
   for (const f of sel){

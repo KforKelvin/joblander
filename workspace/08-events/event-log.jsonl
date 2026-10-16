@@ -1512,3 +1512,6 @@
 {"ts": "2026-10-16T10:39:37-05:00", "kind": "daemon.started", "source": "daemon", "payload": {"jobs": ["transcript_watch", "calendar_watch", "notion_diff_pull", "gmail_scan", "nightly_sourcing", "morning_report", "evening_diary", "weekly_report"]}}
 {"ts": "2026-10-16T10:50:20-05:00", "kind": "daemon.started", "source": "daemon", "payload": {"jobs": ["transcript_watch", "calendar_watch", "notion_diff_pull", "gmail_scan", "nightly_sourcing", "morning_report", "evening_diary", "weekly_report"]}}
 {"ts": "2026-10-16T11:03:19-05:00", "kind": "daemon.started", "source": "daemon", "payload": {"jobs": ["transcript_watch", "calendar_watch", "notion_diff_pull", "gmail_scan", "nightly_sourcing", "morning_report", "evening_diary", "weekly_report"]}}
+{"ts": "2026-10-17T03:58:14+08:00", "kind": "task.failed", "source": "web", "payload": {"kind": "sourcing", "label": "搜新机会", "error": "缺 OPENAI_API_KEY 环境变量"}}
+{"ts": "2026-10-17T03:59:20+08:00", "kind": "task.failed", "source": "web", "payload": {"kind": "sourcing", "label": "搜新机会", "error": "缺 OPENAI_API_KEY 环境变量"}}
+{"ts": "2026-10-16T15:04:00-05:00", "kind": "proposal.rejected", "source": "human", "payload": {"file": "2026-10-16-102847-ProPetro-Services,-Inc-003199.json", "reason": ""}}
